@@ -1,10 +1,10 @@
 close all
 clear
 
-N_min = 100;
-N_max = 1000;
+N_min = 50;
+N_max = 10000;
 
-N_range = N_min:100:N_max;
+N_range = N_min:1000:N_max;
 
 N_num = length(N_range);
 time_svm = zeros(N_num, 1);

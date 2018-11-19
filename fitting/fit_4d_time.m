@@ -4,6 +4,7 @@ kernel = 'gaussian';
 
 N_min = 5;
 N_max = 11;
+assert(N_min > 1);
 N_range = N_min:1:N_max;
 
 time_svm = zeros(length(N_range), 1);

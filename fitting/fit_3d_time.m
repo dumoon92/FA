@@ -3,8 +3,9 @@ clear
 
 kernel = 'gaussian';
 
-N_min = 5;
-N_max = 20;
+N_min = 2;
+N_max = 50;
+assert(N_min > 1);
 N_range = N_min:1:N_max;
 
 time_svm = zeros(length(N_range), 1);
