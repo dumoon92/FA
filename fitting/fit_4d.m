@@ -21,7 +21,7 @@ time_krig = toc
 X_test = test(:,1:3);
 z_vec_test = test(:, 4);
 z_predict_svm = predict(svmMdl, X_test);
-err = immse(z_predict_svm, z_vec_test)
+err_predict_svm = immse(z_predict_svm, z_vec_test)
 
 z_predict_krig = predict(krigMdl, X_test);
-err = immse(z_predict_krig, z_vec_test)
+err_predict_krig = immse(z_predict_krig, z_vec_test)
