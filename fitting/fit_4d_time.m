@@ -1,6 +1,7 @@
 close all
 clear
-kernel = 'gaussian';
+svm_kernel = 'gaussian';
+krig_kernel = 'squaredexponential';
 
 N_min = 5;
 N_max = 11;
@@ -57,13 +58,13 @@ for i = 1:length(N_range)
     z_vec_test = test(:, 4);  % ideal data
 
     tic
-    [z_svm, svmMdl] = my_fitrsvm(X, z_vec, kernel);  % training model, z_svm is results, svmMdl is model
+    [z_svm, svmMdl] = my_fitrsvm(X, z_vec, svm_kernel);  % training model, z_svm is results, svmMdl is model
     time_svm(i) = toc;  % training time
     z_svm_predict = predict(svmMdl, X_test);  % using model generate fitted data
     rmse_svm(i) = sqrt(immse(z_vec_test, z_svm_predict));   % compare generated fitted data and ideal data
 
     tic
-    [z_krig, krigMdl] = my_fitrkrig(X, z_vec);
+    [z_krig, krigMdl] = my_fitrkrig(X, z_vec, krig_kernel);
     time_krig(i) = toc;
     z_krig_predict = predict(krigMdl, X_test);
     rmse_krig(i) = sqrt(immse(z_vec_test, z_krig_predict));
@@ -86,10 +87,10 @@ hold off
 figure
 hold on
 grid on
-plot(N_range, mag2db(rmse_krig))
-plot(N_range, mag2db(rmse_svm))
+plot(N_range,rmse_krig)
+plot(N_range, rmse_svm)
 title('RMSE for 4D')
 legend('Krig', 'SVM')
 xlabel('Data Amount N')
-ylabel('RMSE (dB)')
+ylabel('RMSE')
 hold off
