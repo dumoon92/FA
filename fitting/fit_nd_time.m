@@ -1,11 +1,12 @@
+%% Fitting a 10 variable function with SVM and Kriging 
+
 clear
-clc
 close all 
 
-N = 5;
+N = 2;
 considered_variable = ["S_w", "W_fw", "A", "Lambda", "q", "lambda", "tC", "N_L", "W_dg", "W_p"];
-N_train = int64(linspace(1000, 10000, N));
-N_test = int64(linspace(100, 1000, N));
+N_train = int64(linspace(1000, 2e4, N));  % training number of points from xxx to xxx, devided by N parts
+N_test = int64(linspace(100, 890, N));  % testing number of points from xxx to xxx, devided by N parts
 
 svm_time_record = zeros(N, 1);
 svm_rmse_record = zeros(N, 1);
@@ -20,14 +21,13 @@ for i = 1:N
 end
 
 %% plot
-
 figure
 hold on
 grid on
 plot(N_train, krig_time_record)
 plot(N_train, svm_time_record)
 legend('Krig', 'SVM')
-title('Training Time for 4D')
+title('Training Time for 10D')
 xlabel('Data Amount N')
 ylabel('Training Time (Seconds)')
 hold off
@@ -38,8 +38,8 @@ hold on
 grid on
 plot(N_train,krig_rmse_record)
 plot(N_train, svm_rmse_record)
-title('RMSE for 4D')
+title('Normalized RMSE for 10D')
 legend('Krig', 'SVM')
 xlabel('Data Amount N')
-ylabel('RMSE')
+ylabel('Normalized RMSE')
 hold off

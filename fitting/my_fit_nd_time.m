@@ -13,20 +13,19 @@ krig_kernel = 'squaredexponential';
 [X_train, W_train] = generate_10_variable_function(N_train, considered_variable);
 [X_test, W_test] = generate_10_variable_function(N_test, considered_variable);
 
-%% A ten-variable weight function
-
 %% training and testing
+%  use normalized RMSE with the definition: NRMSD = RMSD/(y_max-y_min)
 
  tic
 [~, svmMdl] = my_fitrsvm(X_train, W_train, svm_kernel);  % training model, svmMdl is model
-time_svm = toc  % training time
+time_svm = toc;  % training time
 W_svm_predict = predict(svmMdl, X_test);  % using model generate fitted data
-rmse_svm = sqrt(immse(W_test, W_svm_predict))/double(N_test)  % compare generated fitted data and ideal data, averaged per point
+rmse_svm = sqrt(immse(W_test, W_svm_predict))/double(N_test)/(max(W_test)-min(W_test));  % compare generated fitted data and ideal data, averaged per point
  
  tic
 [~, krigMdl] = my_fitrkrig(X_train, W_train, krig_kernel);  % training model,  krigMdl is model
-time_krig = toc  % training time
+time_krig = toc;  % training time
 W_krig_predict = predict(krigMdl, X_test);  % using model generate fitted data
-rmse_krig = sqrt(immse(W_test, W_krig_predict))/double(N_test)   % compare generated fitted data and ideal data, averaged per point
+rmse_krig = sqrt(immse(W_test, W_krig_predict))/double(N_test)/(max(W_test)-min(W_test));   % compare generated fitted data and ideal data, averaged per point
 
-
+f = 0;

@@ -14,10 +14,16 @@ switch krig_kernel
         phi = [std(X)';1;std(Y)/sqrt(2)];
 end
 
-gprMdl = fitrgp(X,Y,'KernelFunction','squaredexponential','KernelParameters',phi);
+gprMdl = fitrgp(X,Y,'KernelFunction', krig_kernel, 'KernelParameters',phi, 'SigmaLowerBound',0.02);
 % gprMdl = fitrgp(X,Y,'Basis','linear',...
 %         'FitMethod','exact','PredictMethod','exact',...
 %         'KernelFunction',krig_kernel, 'KernelParameters', phi);
+
+%  About  'SigmaLowerBound',0.02
+% if using default value, maximum number is 8900, or the error will be
+% The Cholesky factor needed for making predictions cannot be computed. When calling fitrgp, try changing the initial values of
+% 'KernelParameters' and 'Sigma'. Also consider setting 'Standardize' to true and increasing the value of 'SigmaLowerBound'.
+% follow this https://de.mathworks.com/matlabcentral/answers/253605-kernel-custom-problem-firgp
 
 
 Y_krig = resubPredict(gprMdl);
