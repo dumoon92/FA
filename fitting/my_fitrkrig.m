@@ -15,10 +15,9 @@ switch krig_kernel
         phi = [std(X)';1;std(Y)/sqrt(2)];
 end
 
-gprMdl = fitrgp(X,Y,'KernelFunction', krig_kernel, 'KernelParameters',phi, 'SigmaLowerBound',0.2, 'Standardize', true);
-% gprMdl = fitrgp(X,Y,'Basis','linear',...
-%         'FitMethod','exact','PredictMethod','exact',...
-%         'KernelFunction',krig_kernel, 'KernelParameters', phi);
+% gprMdl = fitrgp(X,Y,'KernelFunction', krig_kernel, 'KernelParameters',phi, 'SigmaLowerBound',0.2, 'Standardize', true);
+gprMdl = fitrgp(X,Y,'KernelFunction', krig_kernel, 'KernelParameters',phi);
+
 
 %  About  'SigmaLowerBound',0.02
 % if using default value, maximum number is 8900, or the error will be

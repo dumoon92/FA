@@ -1,0 +1,7 @@
+nmEnvirParamMa = 
+    'wind speed'
+    'wind stddev'
+    'wave height'
+    'wave period'
+    'wind direction'
+    'wave direction'

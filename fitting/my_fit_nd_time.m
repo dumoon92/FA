@@ -24,4 +24,3 @@ time_krig = toc;  % training time
 W_krig_predict = predict(krigMdl, X_test);  % using model generate fitted data
 rmse_krig = sqrt(immse(W_test, W_krig_predict))/double(N_test)/mean(W_test);   % compare generated fitted data and ideal data, averaged per point
 
-f = 0;
