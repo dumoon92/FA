@@ -10,20 +10,19 @@ clear
 % [X_train, W_train] = my_generate_10_variable_function(N_train, considered_variable);
 % [X_test, Y_test] = my_generate_10_variable_function(N_test, considered_variable);
 % 
-load('Datenaustausch\FairLeadMaxTensionTraining.mat')
+load('FairLeadMaxTensionTraining.mat')
 X_train = data.Input;
 Y_train = data.Output;
-Y_train = my_remove_nan(Y_train);
+[X_train, Y_train] = remove_nan(X_train, Y_train);
 
-load('Datenaustausch\FairLeadMaxTensionReference.mat')
+load('FairLeadMaxTensionReference.mat')
 if iscell(data.Input)
     X_test = cell2mat(data.Input);
 else
     X_test = data.Input;
 end 
 Y_test = data.Output;
-Y_test = my_remove_nan(Y_test);
-
+[X_test, Y_test] = remove_nan(X_test, Y_test);
 X_test = my_row_normalize(X_test);
 Y_test = my_row_normalize(Y_test);
 
@@ -59,6 +58,6 @@ tic
 NN_Mdl = fitnet(20, 'trainlm');
 surrogate = train(NN_Mdl, X_train', Y_train', 'useGPU','yes');
 Y_NN_predict = (surrogate(X_test'))';
-rmse_NN = sqrt(immse(Y_test, Y_NN_predict))/double(N_test)/mean(Y_test)   % compare generated fitted data and ideal data, averaged per point
 time_NN = toc
+rmse_NN = sqrt(immse(Y_test, Y_NN_predict))/double(N_test)/mean(Y_test)   % compare generated fitted data and ideal data, averaged per point
 
