@@ -98,7 +98,7 @@ switch task
         
     case 'kernel'
         svm_kernel = {'gaussian', 'rbf', 'linear', 'polynomial'};
-        krig_kernel = {'squaredexponential', 'matern32' , 'matern52',...
+        krig_kernel = {'squaredexponential', 'squaredexponential', 'matern32' , 'matern52',...
             'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52'};
         N_train = 1e2;  % training number of points from xxx to xxx, devided by N parts
         N_test = 2e1;  % testing number of points from xxx to xxx, devided by N parts
@@ -123,20 +123,15 @@ switch task
         end
         
         %% plot
-        if strcmp(task, 'kernel')
+        if STRCMP(task, 'kernel')
             figure
             hold on
             grid on
-            title('Training Time for different Kernels')
-            subplot(2, 1, 1)
             bar(categorical(krig_kernel), krig_time_record);
-            legend('Krig')
-            xlabel('Kernel Names')
-            ylabel('Training Time (Seconds)')            
-            subplot(2, 1, 2)
             bar(categorical(svm_kernel), svm_time_record);
-            legend('SVM')
-            xlabel('Kernel Names')
+            legend('Krig', 'SVM')
+            title('Training Time for different Dimension Number')
+            xlabel('Number of Dimension')
             ylabel('Training Time (Seconds)')
             hold off
         else
