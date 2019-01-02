@@ -100,8 +100,8 @@ switch task
         svm_kernel = {'gaussian', 'rbf', 'linear', 'polynomial'};
         krig_kernel = {'squaredexponential', 'matern32' , 'matern52',...
             'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52'};
-        N_train = 1e2;  % training number of points from xxx to xxx, devided by N parts
-        N_test = 2e1;  % testing number of points from xxx to xxx, devided by N parts
+        N_train = 1e3;  % training number of points from xxx to xxx, devided by N parts
+        N_test = 5e2;  % testing number of points from xxx to xxx, devided by N parts
         
         svm_time_record = zeros(length(svm_kernel), 1);
         krig_time_record = zeros(length(krig_kernel), 1);
@@ -127,8 +127,8 @@ switch task
             figure
             hold on
             grid on
-            title('Training Time for different Kernels')
             subplot(2, 1, 1)
+            sgtitle('Training Time for different Kernels')
             bar(categorical(krig_kernel), krig_time_record);
             legend('Krig')
             xlabel('Kernel Names')
@@ -139,6 +139,24 @@ switch task
             xlabel('Kernel Names')
             ylabel('Training Time (Seconds)')
             hold off
+            
+            
+            figure
+            sgtitle('Normalized RMSE for different Kernels')
+            hold on
+            subplot(2, 1, 1)
+            grid on
+            bar(categorical(krig_kernel), krig_rmse_record)
+            legend('Krig')
+            xlabel('Kernel Names')
+            ylabel('Normalized RMSE')
+            subplot(2, 1, 2)
+            bar(categorical(svm_kernel), svm_rmse_record)
+            legend('SVM')
+            xlabel('Kernel Names')
+            ylabel('Normalized RMSE')
+            hold off
+            
         else
             figure
             hold on
@@ -150,18 +168,19 @@ switch task
             xlabel('Number of Dimension')
             ylabel('Training Time (Seconds)')
             hold off
+            
+            figure
+            hold on
+            grid on
+            plot(1:length(krig_kernel), krig_rmse_record)
+            plot(1:length(svm_kernel), svm_rmse_record)
+            title('Normalized RMSE for different Dimension Number')
+            legend('Krig', 'SVM')
+            xlabel('Number of Dimension')
+            ylabel('Normalized RMSE')
+            hold off
         end 
 
-        figure
-        hold on
-        grid on
-        plot(1:length(krig_kernel), krig_rmse_record)
-        plot(1:length(svm_kernel), svm_rmse_record)
-        title('Normalized RMSE for different Dimension Number')
-        legend('Krig', 'SVM')
-        xlabel('Number of Dimension')
-        ylabel('Normalized RMSE')
-        hold off
-        
+
 end
       

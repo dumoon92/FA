@@ -13,7 +13,7 @@ clear
 load('FairLeadMaxTensionTraining.mat')
 X_train = data.Input;
 Y_train = data.Output;
-[X_train, Y_train] = remove_nan(X_train, Y_train);
+[X_train, Y_train] = my_remove_nan(X_train, Y_train);
 
 load('FairLeadMaxTensionReference.mat')
 if iscell(data.Input)
