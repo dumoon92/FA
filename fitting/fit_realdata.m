@@ -22,7 +22,7 @@ else
     X_test = data.Input;
 end 
 Y_test = data.Output;
-[X_test, Y_test] = remove_nan(X_test, Y_test);
+[X_test, Y_test] = my_remove_nan(X_test, Y_test);
 X_test = my_row_normalize(X_test);
 Y_test = my_row_normalize(Y_test);
 
