@@ -45,14 +45,14 @@ Y_krig_predict = predict(krigMdl, X_test);  % using model generate fitted data
 rmse_krig = sqrt(immse(Y_test, Y_krig_predict))/double(N_test)/mean(Y_test)   % compare generated fitted data and ideal data, averaged per point
 
 %% plot
-figure
-k_moving_average = 100;
-plot(Y_test);
-hold on
-grid minor
-plot(Y_svm_predict)
-plot(Y_krig_predict)
-legend('Ref', 'SVM', 'Krig')
+% figure
+% k_moving_average = 100;
+% plot(Y_test);
+% hold on
+% grid minor
+% plot(Y_svm_predict)
+% plot(Y_krig_predict)
+% legend('Ref', 'SVM', 'Krig')
 
 tic
 NN_Mdl = fitnet(20, 'trainlm');
