@@ -1,11 +1,11 @@
 clear; close all;
 
-task = 'krig';  % svm, krig, neural networks
+task = 'svm';  % svm, krig, neural networks
 normalization = true;  % true for normalize
 svm_kernel = 'gaussian';
 krig_kernel = 'squaredexponential';
 
-load('088IRWaSS7_Wi1d89_C4d3_wave.mat', 'WG10_DHI');
+load('DataWave/088IRWaSS7_Wi1d89_C4d3_wave.mat', 'WG10_DHI');
 data_set = WG10_DHI;
 if normalization
     data = my_row_normalize(data_set.Data);
@@ -42,4 +42,4 @@ end
 rmse = immse(predict_data, test_data)/length(test_data)/mean(test_data)
 plt_num = 200;
 plot(test_time(1:plt_num), test_data(1:plt_num), test_time(1:plt_num), predict_data(1:plt_num))
-legend('real_data', 'prediction_data')
+legend('real data', 'prediction data')
