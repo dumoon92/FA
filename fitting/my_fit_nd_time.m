@@ -5,6 +5,8 @@ function [time_svm, rmse_svm, svmMdl, time_krig, rmse_krig, krigMdl] = my_fit_nd
 % N_test = 10;
 % considered_variable =  ["S_w", "W_fw", "A", "Lambda", "q", "lambda", "tC", "N_z", "W_dg", "W_p"];
 % considered_variable = [];
+N_train = int64(N_train);
+N_test = int64(N_test);
 
 [X_train, W_train] = my_generate_10_variable_function(N_train, considered_variable);
 [X_test, W_test] = my_generate_10_variable_function(N_test, considered_variable);
