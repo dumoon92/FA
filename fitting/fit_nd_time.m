@@ -141,6 +141,7 @@ switch task
                 dataset_num(k)*0.3, considered_variable, svm_kernel(i), krig_kernel(i));
             end
         end
+        
         %% plot
     switch task
         case 'kernel'
@@ -182,7 +183,41 @@ switch task
             hold off
             
         case 'kernel-number-time-rmse'
+            figure
+            hold on
+            grid on
+            plot(dataset_num, krig_time_record);
+            title('Training Time for different Krig Kernels')
+            xlabel('Number of Data')
+            ylabel('Training Time (Seconds)')
+            legend('squaredexponential', 'matern32', 'matern52',...
+            'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52');
+            figure
+            hold on;grid on;
+            plot(dataset_num, svm_time_record)
+            legend('gaussian', 'rbf', 'linear', 'polynomial')
+            title('Training Time for different SVM Kernels')
+            xlabel('Number of Data')
+            ylabel('Training Time (Seconds)')
+            hold off
             
+            figure
+            hold on
+            grid on
+            plot(dataset_num, krig_rmse_record);
+            title('RMSE for different Krig Kernels')
+            xlabel('Number of Data')
+            ylabel('RMSE')
+            legend('squaredexponential', 'matern32', 'matern52',...
+            'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52');
+            figure
+            hold on;grid on;
+            plot(dataset_num, svm_rmse_record)
+            legend('gaussian', 'rbf', 'linear', 'polynomial')
+            title('RMSE for different SVM Kernels')
+            xlabel('Number of Data')
+            ylabel('RMSE')
+            hold off           
         
         otherwise
             figure
