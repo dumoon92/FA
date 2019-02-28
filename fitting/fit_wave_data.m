@@ -15,7 +15,7 @@ end
 time = data_set.Time;
 
 train_num = int64(0.7*length(data));
-train_num = 200;  % only for fast testing small number of data 
+% train_num = 2000;  % only for fast testing small number of data 
 train_data = data(1:train_num);
 test_data = data(train_num+1: train_num+1+int64(train_num/4));
 train_time = time(1: train_num);
@@ -39,8 +39,17 @@ switch task
             lstmLayer(numHiddenUnits)
             fullyConnectedLayer(numResponses)
             regressionLayer];
+        options = trainingOptions('adam', ...
+            'MaxEpochs',50, ...
+            'GradientThreshold',1, ...
+            'InitialLearnRate',0.005, ...
+            'LearnRateSchedule','piecewise', ...
+            'LearnRateDropPeriod',125, ...
+            'LearnRateDropFactor',0.2, ...
+            'Verbose',0, ...
+            'Plots','training-progress');
         
-        net = trainNetwork(train_time(1:end-1),train_data(2:end),layers,options);
+        net = trainNetwork(train_data(1:end-1)',train_data(2:end)',layers,options);
 
 end
 time = toc
@@ -52,13 +61,14 @@ switch task
     case 'krig'
         predict_data = predict(krigMdl, test_time);  % using model generate fitted data
     case 'LSTM'
-        net = predictAndUpdateState(net,train_time);
+        net = predictAndUpdateState(net,train_data(1:end-1)');
         [net,predict_data] = predictAndUpdateState(net,train_data(end));
 
         numTimeStepsTest = numel(test_time);
         for i = 2:numTimeStepsTest
             [net,predict_data(:,i)] = predictAndUpdateState(net,predict_data(:,i-1),'ExecutionEnvironment','cpu');
         end
+        predict_data = double(predict_data)';
 end
 rmse = immse(predict_data, test_data)/length(test_data)/mean(test_data)
 plt_num = numel(test_time);
