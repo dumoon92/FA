@@ -5,7 +5,7 @@ close all
 % echo on
 
 task = 'kernel-number-time-rmse';  % number, dimension, kernel, kernel-number-time-rmse
-N = 3;
+N = 10;
 considered_variable = {'N_z', 'A', 'tC', 'S_w', 'W_dg', 'W_p', 'lambda',  'Lambda', 'q', 'W_fw'};
 svm_kernel = 'gaussian';
 krig_kernel = 'squaredexponential';

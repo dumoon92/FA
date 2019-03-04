@@ -1,12 +1,14 @@
 clear; close all;
 
-task = 'LSTM';  % svm, krig, neural networks
+task = 'krig';  % svm, krig, neural networks
 normalization = false;  % true for normalize
-svm_kernel = 'gaussian';
+svm_kernel = 'rbf';
 krig_kernel = 'squaredexponential';
 
-load('DataWave/088IRWaSS7_Wi1d89_C4d3_wave.mat', 'WG10_DHI');
-data_set = WG10_DHI;
+load('C:\Users\du\Documents\MATLAB\FA\FA\fitting\DataWave\088IRWaSS7_Wi1d89_C4d3_wave.mat', 'WG5_DHI');
+run_time = datetime('now')
+task
+data_set = WG5_DHI;
 if normalization
     data = my_row_normalize(data_set.Data);
 else
@@ -14,21 +16,25 @@ else
 end
 time = data_set.Time;
 
-train_num = int64(0.7*length(data));
-% train_num = 2000;  % only for fast testing small number of data 
+% train_num = int64(0.7*length(data));
+train_num = 2000;  % only for fast testing small number of data 
 train_data = data(1:train_num);
-test_data = data(train_num+1: train_num+1+int64(train_num/4));
+test_data = data(train_num+1: train_num+int64(train_num/4));
 train_time = time(1: train_num);
-test_time = time(train_num+1: train_num+1+int64(train_num/4));
+test_time = time(train_num+1: train_num+int64(train_num/4));
 
+% train_time = 1:train_num;
+% train_time = double(train_time');
+% test_time = train_num+1: train_num+int64(train_num/4);
+% test_time = double(test_time');
 
 %% Training
 tic
 switch task
     case 'svm'
-        [~, svmMdl] = my_fitrsvm(train_time, train_data, svm_kernel);
+        [predict_train_data, svmMdl] = my_fitrsvm(train_time, train_data, svm_kernel);
     case 'krig'
-        [~, krigMdl] = my_fitrkrig(train_time, train_data, krig_kernel);  % training model,  krigMdl is model
+        [predict_train_data, krigMdl] = my_fitrkrig(train_time, train_data, krig_kernel);  % training model,  krigMdl is model
     case 'LSTM'
         % https://de.mathworks.com/help/deeplearning/examples/time-series-forecasting-using-deep-learning.html
         numFeatures = 1;
@@ -72,5 +78,5 @@ switch task
 end
 rmse = immse(predict_data, test_data)/length(test_data)/mean(test_data)
 plt_num = numel(test_time);
-plot(test_time(1:plt_num), test_data(1:plt_num), test_time(1:plt_num), predict_data(1:plt_num))
+plot(train_time, train_data, train_time, predict_train_data, test_time(1:plt_num), test_data(1:plt_num), test_time(1:plt_num), predict_data(1:plt_num))
 legend('real data', 'prediction data')
