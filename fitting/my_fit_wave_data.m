@@ -1,14 +1,17 @@
-clear; close all;
-
-task = 'krig';  % svm, krig, neural networks
-normalization = false;  % true for normalize
-svm_kernel = 'rbf';
-krig_kernel = 'squaredexponential';
-
-load('C:\Users\du\Documents\MATLAB\FA\FA\fitting\DataWave\088IRWaSS7_Wi1d89_C4d3_wave.mat', 'WG5_DHI');
+function [tic_toc, predict_data] = my_fit_wave_data(data, test_x, task, kernel, normalization)
+[m,n] = size(test_x);
+if m < n
+    test_x = test_x';
+end
+% task = 'krig';  % svm, krig, neural networks
+% normalization = false;  % true for normalize
+% svm_kernel = 'rbf';
+% krig_kernel = 'squaredexponential';
+% 
+% load('C:\Users\du\Documents\MATLAB\FA\FA\fitting\DataWave\088IRWaSS7_Wi1d89_C4d3_wave.mat', 'WG5_DHI');
 run_time = datetime('now')
 task
-data_set = WG5_DHI;
+data_set = data;
 if normalization
     data = my_row_normalize(data_set.Data);
 else
@@ -32,9 +35,9 @@ test_time = time(train_num+1: train_num+int64(train_num/4));
 tic
 switch task
     case 'svm'
-        [predict_train_data, svmMdl] = my_fitrsvm(train_time, train_data, svm_kernel);
+        [predict_train_data, svmMdl] = my_fitrsvm(train_time, train_data, kernel);
     case 'krig'
-        [predict_train_data, krigMdl] = my_fitrkrig(train_time, train_data, krig_kernel);  % training model,  krigMdl is model
+        [predict_train_data, krigMdl] = my_fitrkrig(train_time, train_data, kernel);  % training model,  krigMdl is model
     case 'LSTM'
         % https://de.mathworks.com/help/deeplearning/examples/time-series-forecasting-using-deep-learning.html
         numFeatures = 1;
@@ -58,7 +61,7 @@ switch task
         net = trainNetwork(train_data(1:end-1)',train_data(2:end)',layers,options);
 
 end
-time = toc
+tic_toc = toc
 
 %% Prediction
 switch task
