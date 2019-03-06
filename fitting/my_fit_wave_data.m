@@ -1,4 +1,4 @@
-function [tic_toc, predict_data] = my_fit_wave_data(data, test_x, task, kernel, normalization)
+function [tic_toc, predict_data] = my_fit_wave_data(data_set, test_x, task, kernel, normalization)
 [m,n] = size(test_x);
 if m < n
     test_x = test_x';
@@ -8,10 +8,8 @@ end
 % svm_kernel = 'rbf';
 % krig_kernel = 'squaredexponential';
 % 
-% load('C:\Users\du\Documents\MATLAB\FA\FA\fitting\DataWave\088IRWaSS7_Wi1d89_C4d3_wave.mat', 'WG5_DHI');
 run_time = datetime('now')
 task
-data_set = data;
 if normalization
     data = my_row_normalize(data_set.Data);
 else
@@ -57,8 +55,8 @@ switch task
             'LearnRateDropFactor',0.2, ...
             'Verbose',0, ...
             'Plots','training-progress');
-        
-        net = trainNetwork(train_data(1:end-1)',train_data(2:end)',layers,options);
+
+        net = trainNetwork(train_time(1:end-1)',train_data(2:end)',layers,options);
 
 end
 tic_toc = toc
@@ -78,6 +76,14 @@ switch task
             [net,predict_data(:,i)] = predictAndUpdateState(net,predict_data(:,i-1),'ExecutionEnvironment','cpu');
         end
         predict_data = double(predict_data)';
+
+        [net,predict_train_data] = predictAndUpdateState(net,train_data(end));
+        size(predict_train_data)
+        numTimeStepsTest = numel(train_time);
+        for i = 2:numTimeStepsTest
+            [net,predict_train_data(:,i)] = predictAndUpdateState(net,predict_train_data(:,i-1),'ExecutionEnvironment','cpu');
+        end
+        predict_train_data = double(predict_train_data)';
 end
 rmse = immse(predict_data, test_data)/length(test_data)/mean(test_data)
 plt_num = numel(test_time);
