@@ -252,4 +252,4 @@ switch task
 
 
 end
-      
+save('10d_rmse_time_record.mat')
