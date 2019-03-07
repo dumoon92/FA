@@ -132,7 +132,7 @@ switch task
         krig_time_record = zeros(length(krig_kernel), N);
         svm_rmse_record = zeros(length(svm_kernel), N);
         krig_rmse_record = zeros(length(krig_kernel), N);
-        for i = 1:length(svm_kernel)
+        for i = 1:numel(svm_kernel)
             svm_kernel(i)
             for k = 1:length(dataset_num)
                 int64(dataset_num(k))
@@ -190,8 +190,7 @@ switch task
             title('Training Time for different Krig Kernels')
             xlabel('Number of Data')
             ylabel('Training Time (Seconds)')
-            legend('squaredexponential', 'matern32', 'matern52',...
-            'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52');
+            legend('squaredexponential', 'matern32', 'matern52', 'ardsquaredexponential');
 %             hold off;
             saveas(gcf, 'Training_Time_for_different_Krig_Kernels.pdf')
             figure
@@ -212,8 +211,7 @@ switch task
             title('RMSE for different Krig Kernels')
             xlabel('Number of Data')
             ylabel('RMSE')
-            legend('squaredexponential', 'matern32', 'matern52',...
-            'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52');
+            legend('squaredexponential', 'matern32', 'matern52', 'ardsquaredexponential');
 %             hold off;
             saveas(gcf, 'RMSE_for_different_Krig_Kernels.pdf')
             figure
