@@ -5,7 +5,7 @@ close all
 % echo on
 
 task = 'kernel-number-time-rmse';  % number, dimension, kernel, kernel-number-time-rmse
-N = 20;
+N = 3;
 considered_variable = {'N_z', 'A', 'tC', 'S_w', 'W_dg', 'W_p', 'lambda',  'Lambda', 'q', 'W_fw'};
 svm_kernel = 'gaussian';
 krig_kernel = 'squaredexponential';
@@ -193,6 +193,7 @@ switch task
             legend('squaredexponential', 'matern32', 'matern52',...
             'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52');
 %             hold off;
+            saveas(gcf, 'Training_Time_for_different_Krig_Kernels.pdf')
             figure
 %             hold on;
             grid on;
@@ -202,6 +203,7 @@ switch task
             xlabel('Number of Data')
             ylabel('Training Time (Seconds)')
 %             hold off
+            saveas(gcf, 'Training_Time_for_different_SVM_Kernels.pdf')
             
             figure
 %             hold on
@@ -213,6 +215,7 @@ switch task
             legend('squaredexponential', 'matern32', 'matern52',...
             'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52');
 %             hold off;
+            saveas(gcf, 'RMSE_for_different_Krig_Kernels.pdf')
             figure
 %             hold on;
             grid on;
@@ -222,7 +225,7 @@ switch task
             xlabel('Number of Data')
             ylabel('RMSE')
 %             hold off           
-        
+            saveas(gcf, 'RMSE_for_different_SVM_Kernels.pdf')
         otherwise
             figure
             hold on
