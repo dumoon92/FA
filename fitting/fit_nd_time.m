@@ -5,7 +5,7 @@ close all
 % echo on
 
 task = 'kernel-number-time-rmse';  % number, dimension, kernel, kernel-number-time-rmse
-N = 10;
+N = 20;
 considered_variable = {'N_z', 'A', 'tC', 'S_w', 'W_dg', 'W_p', 'lambda',  'Lambda', 'q', 'W_fw'};
 svm_kernel = 'gaussian';
 krig_kernel = 'squaredexponential';
@@ -184,40 +184,44 @@ switch task
             
         case 'kernel-number-time-rmse'
             figure
-            hold on
-            grid on
-            plot(dataset_num, krig_time_record);
+%             hold on
+%             grid on
+            semilogy(dataset_num, krig_time_record);
             title('Training Time for different Krig Kernels')
             xlabel('Number of Data')
             ylabel('Training Time (Seconds)')
             legend('squaredexponential', 'matern32', 'matern52',...
             'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52');
+%             hold off;
             figure
-            hold on;grid on;
-            plot(dataset_num, svm_time_record)
+%             hold on;
+            grid on;
+            semilogy(dataset_num, svm_time_record)
             legend('gaussian', 'rbf', 'linear', 'polynomial')
             title('Training Time for different SVM Kernels')
             xlabel('Number of Data')
             ylabel('Training Time (Seconds)')
-            hold off
+%             hold off
             
             figure
-            hold on
+%             hold on
             grid on
-            plot(dataset_num, krig_rmse_record);
+            semilogy(dataset_num, krig_rmse_record);
             title('RMSE for different Krig Kernels')
             xlabel('Number of Data')
             ylabel('RMSE')
             legend('squaredexponential', 'matern32', 'matern52',...
             'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52');
+%             hold off;
             figure
-            hold on;grid on;
-            plot(dataset_num, svm_rmse_record)
+%             hold on;
+            grid on;
+            semilogy(dataset_num, svm_rmse_record)
             legend('gaussian', 'rbf', 'linear', 'polynomial')
             title('RMSE for different SVM Kernels')
             xlabel('Number of Data')
             ylabel('RMSE')
-            hold off           
+%             hold off           
         
         otherwise
             figure
