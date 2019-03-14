@@ -100,7 +100,7 @@ switch task
     case 'kernel'
         svm_kernel = {'gaussian', 'rbf', 'linear', 'polynomial'};
         krig_kernel = {'squaredexponential', 'matern32' , 'matern52',...
-            'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52'};
+            'ardsquaredexponential'};%, 'ardmatern32' , 'ardmatern52'};
         N_train = 1e3;  % training number of points from xxx to xxx, devided by N parts
         N_test = 5e2;  % testing number of points from xxx to xxx, devided by N parts
         
@@ -126,7 +126,7 @@ switch task
     case 'kernel-number-time-rmse'
         svm_kernel = {'gaussian', 'rbf', 'linear', 'polynomial'};
         krig_kernel = {'squaredexponential', 'matern32', 'matern52',...
-            'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52'};
+            'ardsquaredexponential'} % , 'ardmatern32' , 'ardmatern52'};
         dataset_num = logspace(2, 4, N);  % logspace, like 1e2, 1e3, 1e4...
         svm_time_record = zeros(length(svm_kernel), N);
         krig_time_record = zeros(length(krig_kernel), N);
