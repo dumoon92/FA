@@ -11,7 +11,7 @@ import numpy as np
 data = sio.loadmat('088IRWaSS7_Wi1d89_C4d3_wave')
 datensatzen = 2000
 datenlaenge =500
-predictlen = 200
+predictlen = 2000
 plt.close
 testdatenstart =np.random.randint(10000,80000)
 print(testdatenstart)
@@ -19,6 +19,8 @@ wave = data['WG10_DHI'][0][0][0]
 wave = [i * 10 for i in wave]
 length = np.arange(len(wave))
 #plt.figure(1)
+
+
 inputdata= []
 #plt.plot(length,y1)
 for i in range(datensatzen):
@@ -36,8 +38,8 @@ for a in range(datenlaenge):
 xtest = np.array(xtest).reshape(1,-1)     
 ypredict = []
 ytest = wave[testdatenstart+datenlaenge:testdatenstart+datenlaenge+predictlen]
-ytest = [ytest[i]for i in range(0,predictlen,4)]
-for k in range (0,predictlen,4):
+ytest = [ytest[i]for i in range(0,predictlen, 5)]
+for k in range (0,predictlen, 5):
     clf = SVR(kernel = 'rbf', gamma=0.001, C=1000)
     inputy = inputlabel[:,k]
     clf.fit(inputdata,inputy)
@@ -45,3 +47,4 @@ for k in range (0,predictlen,4):
 
 plt.plot(range(len(ytest)),ypredict,color = 'r', label = 'predict')
 plt.plot(range(len(ytest)),ytest,color = 'b', label = 'real')
+plt.show()
