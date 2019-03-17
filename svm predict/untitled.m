@@ -7,10 +7,10 @@ data=load('088IRWaSS7_Wi1d89_C4d3_wave.mat');
 data=data.WG10_DHI;
 x_raw=data.Time;y_raw=data.Data;
 y = my_row_normalize(y_raw)*1e2;
-
+y = sin(2*pi*linspace(0, 5*pi, 1e5))';
 data_set_num = 2e2;
 train_len = 1e3;
-predict_len = 2e3;
+predict_len = 2e4;
 
 start_train_index = 1;
 start_predict_index = randi([4e4 8e4],1,1)
