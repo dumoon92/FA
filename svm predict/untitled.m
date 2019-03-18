@@ -7,7 +7,7 @@ data=load('088IRWaSS7_Wi1d89_C4d3_wave.mat');
 data=data.WG10_DHI;
 x_raw=data.Time;y_raw=data.Data;
 y = my_row_normalize(y_raw)*1e2;
-y = sin(2*pi*linspace(0, 5*pi, 1e5))';
+y = sin(2*pi*linspace(0, 5*pi, 1e5))';  % use sinus function as test
 data_set_num = 2e2;
 train_len = 1e3;
 predict_len = 2e4;
@@ -34,7 +34,7 @@ end
 plot(predict_y(1, :), 'r--')
 hold on 
 plot(test_y, 'b')
-saveas(gcf, 'untitled.pdf')
+saveas(gcf, strcat('untitled_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
 
 
 
