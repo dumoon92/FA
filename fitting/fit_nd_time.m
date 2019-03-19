@@ -160,7 +160,7 @@ switch task
         svm_rmse_record = zeros(length(svm_kernel), N);
         krig_rmse_record = zeros(length(krig_kernel), N);
         for i = 1:numel(svm_kernel)
-            svm_kernel(i)
+            i
             for k = 1:length(dataset_num)
                 int64(dataset_num(k))
                 [svm_time_record(i, k), svm_rmse_record(i, k), ~, krig_time_record(i, k),...

@@ -16,8 +16,12 @@ switch krig_kernel
 end
 
 % gprMdl = fitrgp(X,Y,'KernelFunction', krig_kernel, 'KernelParameters',phi, 'SigmaLowerBound',0.2, 'Standardize', true);
-gprMdl = fitrgp(X,Y,'KernelFunction', krig_kernel, 'KernelParameters',phi);
-
+switch krig_kernel
+    case 'ardsquaredexponential'
+        gprMdl = fitrgp(X,Y,'KernelFunction', 'ardsquaredexponential');
+    otherwise
+        gprMdl = fitrgp(X,Y,'KernelFunction', krig_kernel);%, 'KernelParameters',phi);
+end
 
 %  About  'SigmaLowerBound',0.02
 % if using default value, maximum number is 8900, or the error will be
