@@ -20,7 +20,7 @@ for i = 1:numel(data_set_num_set)
     for k = 1:numel(train_len_set)
         train_len = train_len_set(k);
         [test_y, predict_y, error] = my_new_krig(y_raw, data_set_num, train_len, ...
-            predict_len, start_train_index, start_predict_index);
+            predict_len, start_train_index, start_predict_index, 'exponential');
         error_matrix(i, k) = error;
     end
 end

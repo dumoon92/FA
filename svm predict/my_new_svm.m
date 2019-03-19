@@ -1,4 +1,4 @@
-function [test_y, predict_y, error] = my_new_svm(y_raw, data_set_num, train_len, predict_len, start_train_index, start_predict_index)
+function [test_y, predict_y, error] = my_new_svm(y_raw, data_set_num, train_len, predict_len, start_train_index, start_predict_index, kernel)
 %% use front y as x, following y as y, no relation of time
 y = my_row_normalize(y_raw);
 % y = sin(2*pi*linspace(0, 5*pi, 1e3))';  % use sinus function as test
@@ -16,7 +16,7 @@ predict_y_input = y(start_predict_index-train_len: start_predict_index-1)';
 % the used data for prediction is only from 4e4-2e3 to 4e4-1
 for label_index = 1:predict_len
     label_index
-    svmMdl = fitrsvm(train_input, train_label(:, label_index));
+    svmMdl = fitrsvm(train_input, train_label(:, label_index), 'KernelFunction', kernel);
     predict_y(:, label_index) = predict(svmMdl, predict_y_input);
 %     size(predict(svmMdl, y(start_predict_index-predict_len+label_index:start_predict_index-1+label_index)))
 end

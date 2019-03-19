@@ -28,7 +28,7 @@ legend('NN', 'krig ardsquaredexponential', 'svm polynomial');
 title('Training Time of different methods')
 xlabel('Number of Data')
 ylabel('Training Time (Seconds)')
-saveas(gcf, 'NN_time_record.pdf')
+saveas(gcf, 'NNvsKrigvsSVM_time_record.pdf')
 % legend(['NN', krig_kernel, svm_kernel])
 
 %%
@@ -39,4 +39,4 @@ legend('NN', 'krig ardsquaredexponential', 'svm polynomial');
 title('Training RMSE of different methods')
 xlabel('Number of Data')
 ylabel('RMSE')
-saveas(gcf, 'NN_rmse_record.pdf')
+saveas(gcf, 'NNvsKrigvsSVM_rmse_record.pdf')
