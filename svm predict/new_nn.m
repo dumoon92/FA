@@ -6,7 +6,7 @@ data=data.WG10_DHI;
 x_raw=data.Time;
 y_raw=data.Data;
 
-mesh_dencity = 10;
+mesh_dencity = 2;
 data_set_num_set = floor(linspace(1e1, 5e2, mesh_dencity));
 train_len_set = floor(linspace(1e1, 5e2, mesh_dencity)); 
 
@@ -19,7 +19,7 @@ for i = 1:numel(data_set_num_set)
     data_set_num = data_set_num_set(i);
     for k = 1:numel(train_len_set)
         train_len = train_len_set(k);
-        [test_y, predict_y, error] = my_new_svm(y_raw, data_set_num, train_len, ...
+        [test_y, predict_y, error] = my_new_nn(y_raw, data_set_num, train_len, ...
             predict_len, start_train_index, start_predict_index);
         error_matrix(i, k) = error;
     end
@@ -33,5 +33,5 @@ h = heatmap(error_matrix);
 % h.YLabel = 'train len set';
 % h.Title = 'Ralative Errors in different parameters'
 
-saveas(gcf, strcat('new_svm_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
+saveas(gcf, strcat('new_nn_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
 save('new_svm.mat')
