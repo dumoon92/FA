@@ -24,8 +24,11 @@ for i = 1:numel(data_set_num_set)
         error_matrix(i, k) = error;
     end
 end
-% h = heatmap(data_set_num_set, train_len_set, error_matrix);
 figure
 h = heatmap(error_matrix);
+% h = heatmap(data_set_num_set, train_len_set, error_matrix);  % only for high version MATLAB
+h.XLabel = 'data set num set';
+h.YLabel = 'train len set';
+h.Title = 'Ralative Errors in different parameters'
 saveas(gcf, strcat('new_svm_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
 save('new_svm.mat')
