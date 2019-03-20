@@ -18,21 +18,11 @@ predict_y_input = y(start_predict_index-train_len: start_predict_index-1)';
 
 % calculate KernelParameters with variable phi
 kernel = char(kernel);
-switch kernel
-    case {'exponential' , 'squaredexponential' , 'matern32' , 'matern52'}
-        phi = [mean(std(X)),std(Y)/sqrt(2)];
-    case 'rationalquadratic'
-        phi = [mean(std(X));1;std(Y)/sqrt(2)];
-    case {'ardexponential' , 'ardsquaredexponential' , 'ardmatern32' , 'ardmatern52'}
-        phi = [std(X)';std(Y)/sqrt(2)];
-    case 'ardrationalquadratic'
-        phi = [std(X)';1;std(Y)/sqrt(2)];
-end
 
 for label_index = 1:predict_len
     label_index
-    svmMdl = fitrgp(train_input, train_label(:, label_index), 'KernelFunction', krig_kernel, 'KernelParameters',phi);
-    predict_y(:, label_index) = predict(svmMdl, predict_y_input);
+    krigMdl = fitrgp(train_input, train_label(:, label_index), 'KernelFunction', kernel);
+    predict_y(:, label_index) = predict(krigMdl, predict_y_input);
 %     size(predict(svmMdl, y(start_predict_index-predict_len+label_index:start_predict_index-1+label_index)))
 end
 figure
@@ -48,7 +38,7 @@ plot(abs(test_y - predict_y(1, :)')./test_y);
 hold on 
 title('relative error in %')
 saveas(gcf, strcat('new_krig_', regexprep(datestr(now,'dd-mm-yyyy HH:MM:SS FFF'), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
-
+close
 
 
 

@@ -25,7 +25,7 @@ for kernel_num = 1:4
             train_len = train_len_set(k);
             [test_y, predict_y, error] = my_new_svm(y_raw, data_set_num, train_len, ...
                 predict_len, start_train_index, start_predict_index, svm_kernel(kernel_num));
-            error_matrix(i, k, kernel_num) = error;
+            error_matrix(k, i, kernel_num) = error;
         end
     end
 end
