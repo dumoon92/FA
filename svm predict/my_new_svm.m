@@ -1,5 +1,7 @@
 function [test_y, predict_y, error] = my_new_svm(y_raw, data_set_num, train_len, predict_len, start_train_index, start_predict_index, kernel)
 %% use front y as x, following y as y, no relation of time
+kernel
+kernel = char(kernel);
 y = my_row_normalize(y_raw);
 % y = sin(2*pi*linspace(0, 5*pi, 1e3))';  % use sinus function as test
 
@@ -32,7 +34,7 @@ error = sum(abs(test_y - predict_y(1, :)')./test_y)/numel(test_y);
 plot(abs(test_y - predict_y(1, :)')./test_y);
 hold on 
 title('relative error in %')
-saveas(gcf, strcat('new_svm_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
+saveas(gcf, strcat('new_svm_', regexprep(datestr(now,'dd-mm-yyyy HH:MM:SS FFF'), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
 
 
 
