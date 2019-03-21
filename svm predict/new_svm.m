@@ -20,7 +20,7 @@ krig_kernel = {'squaredexponential', 'matern32', 'matern52',...
     'ardsquaredexponential'};
 error_matrix = ones(mesh_dencity, mesh_dencity, 4);
 time_matrix = ones(mesh_dencity, mesh_dencity, 4);
-for kernel_num = 1:4
+for kernel_num = 1:numel(svm_kernel)
     for i = 1:numel(data_set_num_set)
         data_set_num = data_set_num_set(i);
         for k = 1:numel(train_len_set)
