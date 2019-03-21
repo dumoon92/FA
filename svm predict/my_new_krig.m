@@ -34,13 +34,16 @@ subplot(2, 1, 1);
 plot(predict_y(1, :), 'r--')
 hold on 
 plot(test_y, 'b')
-title({[kernel; 'data set num = ', num2str(data_set_num)]; ['train len = ', num2str(train_len)]; ['predict len = ', num2str(predict_len)]; ...
+title({['kernel = ', kernel]; ['data set num = ', num2str(data_set_num)]; ['train len = ', num2str(train_len)]; ['predict len = ', num2str(predict_len)]; ...
         ['start train index = ', num2str(start_train_index)]; ['start predict index = ', num2str(start_predict_index)]}');
 subplot(2, 1, 2);
 error = sum(abs(test_y - predict_y(1, :)')./test_y)/numel(test_y);
 plot(abs(test_y - predict_y(1, :)')./test_y);
 hold on 
 title('relative error in %')
+set(gcf, 'Units', 'inches');
+pos = get(gcf, 'Position');
+set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
 saveas(gcf, strcat('new_krig_', regexprep(datestr(now,'dd-mm-yyyy HH:MM:SS FFF'), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 
 close

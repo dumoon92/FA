@@ -6,22 +6,21 @@ data=data.WG10_DHI;
 x_raw=data.Time;
 y_raw=data.Data;
 
-mesh_dencity = 3;
+mesh_dencity = 1;
 % data_set_num_set = floor(linspace(1e1, 5e2, mesh_dencity));
 % train_len_set = floor(linspace(1e1, 5e2, mesh_dencity)); 
 
-data_set_num_set = [300];
-train_len_set = [300]; 
+data_set_num_set = [150];
+train_len_set = [150]; 
 
 parameter_str = strcat('-',num2str(data_set_num_set(end)), '-', num2str(train_len_set(end)),'_');
 
-predict_len = 200; 
-start_train_index = 1; 
+predict_len = 500; 
+start_train_index = 357; 
 start_predict_index = 3e4;
 
 svm_kernel = {'gaussian', 'rbf', 'linear', 'polynomial'};
-krig_kernel = {'squaredexponential', 'matern32', 'matern52',...
-    'ardsquaredexponential'};
+krig_kernel = {'squaredexponential', 'matern32', 'matern52'};
 kernel_num = numel(krig_kernel);
 error_matrix = ones(mesh_dencity, mesh_dencity, kernel_num);
 time_matrix = ones(mesh_dencity, mesh_dencity, 4);
@@ -53,5 +52,8 @@ for kernel_num = 1:kernel_num
         h.Title = strcat('Ralative Errors by Krig with kernel: ', krig_kernel(kernel_num));
     end
 end
+set(gcf, 'Units', 'inches');
+pos = get(gcf, 'Position');
+set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
 saveas(gcf, strcat('new_krig_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 save(strcat('new_krig', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.mat'))
