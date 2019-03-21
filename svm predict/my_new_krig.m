@@ -24,8 +24,9 @@ for label_index = 1:predict_len
     if mod(label_index, 20) == 0
         label_index
     end
-    svmMdl = fitrgp(train_input, train_label(:, label_index), 'KernelFunction', kernel);
-    predict_y(:, label_index) = predict(svmMdl, predict_y_input);
+
+    krigMdl = fitrgp(train_input, train_label(:, label_index), 'KernelFunction', kernel);
+    predict_y(:, label_index) = predict(krigMdl, predict_y_input);
 %     size(predict(svmMdl, y(start_predict_index-predict_len+label_index:start_predict_index-1+label_index)))
 end
 figure
@@ -41,6 +42,7 @@ plot(abs(test_y - predict_y(1, :)')./test_y);
 hold on 
 title('relative error in %')
 saveas(gcf, strcat('new_krig_', regexprep(datestr(now,'dd-mm-yyyy HH:MM:SS FFF'), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
+
 close
 
 
