@@ -4,6 +4,7 @@ kernel
 kernel = char(kernel);
 y = my_row_normalize(y_raw);
 % y = sin(2*pi*linspace(0, 5*pi, 1e3))';  % use sinus function as test
+parameter_str = strcat('-', num2str(data_set_num), '-', num2str(train_len),'_');
 
 train_input = zeros(data_set_num, train_len);
 train_label = zeros(data_set_num, predict_len);
@@ -36,7 +37,7 @@ error = sum(abs(test_y - predict_y(1, :)')./test_y)/numel(test_y);
 plot(abs(test_y - predict_y(1, :)')./test_y);
 hold on 
 title('relative error in %')
-saveas(gcf, strcat('new_svm_', regexprep(datestr(now,'dd-mm-yyyy HH:MM:SS FFF'), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
+saveas(gcf, strcat('new_svm_', regexprep(datestr(now,'dd-mm-yyyy HH:MM:SS FFF'), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 close
 
 

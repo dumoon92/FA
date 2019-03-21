@@ -9,6 +9,7 @@ y_raw=data.Data;
 mesh_dencity = 2;
 data_set_num_set = floor(linspace(1e1, 5e2, mesh_dencity));
 train_len_set = floor(linspace(1e1, 5e2, mesh_dencity)); 
+parameter_str = strcat('-',num2str(data_set_num_set(end)), '-', num2str(train_len_set(end)),'_');
 
 predict_len = 100; 
 start_train_index = 1; 
@@ -25,7 +26,7 @@ for kernel_num = 1:4
             train_len = train_len_set(k);
             [test_y, predict_y, error] = my_new_krig(y_raw, data_set_num, train_len, ...
                 predict_len, start_train_index, start_predict_index, krig_kernel(kernel_num));
-            error_matrix(i, k) = error;
+            error_matrix(k, i) = error;
         end
     end
 end
@@ -43,6 +44,5 @@ for kernel_num = 1:4
 %     
     title(strcat('Krig with kernel', krig_kernel(kernel_num)))
 end
-
-saveas(gcf, strcat('new_krig_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
-save('new_krig.mat')
+saveas(gcf, strcat('new_krig_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
+save(strcat('new_krig', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.mat'))
