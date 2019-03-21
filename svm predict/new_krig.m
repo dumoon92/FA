@@ -7,11 +7,15 @@ x_raw=data.Time;
 y_raw=data.Data;
 
 mesh_dencity = 3;
-data_set_num_set = floor(linspace(1e1, 5e2, mesh_dencity));
-train_len_set = floor(linspace(1e1, 5e2, mesh_dencity)); 
+% data_set_num_set = floor(linspace(1e1, 5e2, mesh_dencity));
+% train_len_set = floor(linspace(1e1, 5e2, mesh_dencity)); 
+
+data_set_num_set = [300];
+train_len_set = [300]; 
+
 parameter_str = strcat('-',num2str(data_set_num_set(end)), '-', num2str(train_len_set(end)),'_');
 
-predict_len = 100; 
+predict_len = 200; 
 start_train_index = 1; 
 start_predict_index = 3e4;
 

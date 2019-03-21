@@ -30,7 +30,7 @@ subplot(2, 1, 1);
 plot(predict_y(1, :), 'r--')
 hold on 
 plot(test_y, 'b')
-title({['data set num = ', num2str(data_set_num)]; ['train len = ', num2str(train_len)]; ['predict len = ', num2str(predict_len)]; ...
+title({[kernel; 'data set num = ', num2str(data_set_num)]; ['train len = ', num2str(train_len)]; ['predict len = ', num2str(predict_len)]; ...
         ['start train index = ', num2str(start_train_index)]; ['start predict index = ', num2str(start_predict_index)]}');
 subplot(2, 1, 2);
 error = sum(abs(test_y - predict_y(1, :)')./test_y)/numel(test_y);
