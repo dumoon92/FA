@@ -17,7 +17,9 @@ predict_y = zeros(predict_len, predict_len);
 predict_y_input = y(start_predict_index-train_len: start_predict_index-1)';  
 % the used data for prediction is only from 4e4-2e3 to 4e4-1
 for label_index = 1:predict_len
-    label_index
+    if mod(label_index, 20) == 0
+        label_index
+    end
     svmMdl = fitrsvm(train_input, train_label(:, label_index), 'KernelFunction', kernel);
     predict_y(:, label_index) = predict(svmMdl, predict_y_input);
 %     size(predict(svmMdl, y(start_predict_index-predict_len+label_index:start_predict_index-1+label_index)))
@@ -35,6 +37,7 @@ plot(abs(test_y - predict_y(1, :)')./test_y);
 hold on 
 title('relative error in %')
 saveas(gcf, strcat('new_svm_', regexprep(datestr(now,'dd-mm-yyyy HH:MM:SS FFF'), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
+close
 
 
 

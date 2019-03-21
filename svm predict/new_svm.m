@@ -45,4 +45,4 @@ for kernel_num = 1:4
     title(strcat('SVM with kernel', svm_kernel(kernel_num)))
 end
 saveas(gcf, strcat('new_svm_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
-save('new_svm.mat')
+save(strcat('new_svm', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.mat'))
