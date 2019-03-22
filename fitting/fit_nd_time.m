@@ -56,8 +56,8 @@ switch task
         
     case 'dimension-kernel'
         %% the number of dataset
-        N_train = 1e3;  % training number of points from xxx to xxx, devided by N parts
-        N_test = 2e2;  % testing number of points from xxx to xxx, devided by N parts
+        N_train = 1e4;  % training number of points from xxx to xxx, devided by N parts
+        N_test = 2e3;  % testing number of points from xxx to xxx, devided by N parts
 
         svm_kernel = {'gaussian', 'rbf', 'linear', 'polynomial'};
         krig_kernel = {'squaredexponential', 'matern32', 'matern52',...
