@@ -6,14 +6,14 @@ data=data.WG10_DHI;
 x_raw=data.Time;
 y_raw=data.Data;
 
-mesh_dencity = 2;
-data_set_num_set = floor(linspace(1e1, 5e1, mesh_dencity));
-train_len_set = floor(linspace(1e1, 5e1, mesh_dencity)); 
+mesh_dencity = 10;
+data_set_num_set = floor(linspace(1e1, 5e2, mesh_dencity));
+train_len_set = floor(linspace(1e1, 5e2, mesh_dencity)); 
 
 parameter_str = strcat('-',num2str(data_set_num_set(end)), '-', num2str(train_len_set(end)),'_');
 
-predict_len = 100; 
-start_train_index = 357; 
+predict_len = 270; 
+start_train_index = 666; 
 start_predict_index = 3e4;
 
 svm_kernel = {'gaussian', 'rbf', 'linear', 'polynomial'};
@@ -22,8 +22,8 @@ kernel_num_set = numel(krig_kernel);
 error_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
 rmse_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
 time_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
-for kernel_num = 1:kernel_num_set
-    for i = 1:numel(data_set_num_set)
+for kernel_num = 2:kernel_num_set
+    for i = 5:numel(data_set_num_set)
         data_set_num = data_set_num_set(i);
         for k = 1:numel(train_len_set)
             train_len = train_len_set(k);
@@ -98,4 +98,4 @@ set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(
 saveas(gcf, strcat('new_krig_time_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 
 
-save(strcat('new_krig', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.mat'))
+save(strcat('new_krig_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.mat'))
