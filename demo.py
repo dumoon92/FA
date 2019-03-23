@@ -16,7 +16,7 @@ data = norm(data)
 data = np.array(data, dtype=np.float32)
 
 train_start = 0
-train_len = 20
+train_len = 200
 train_set = 500
 
 predict_len = 1
@@ -29,7 +29,7 @@ for i in range(train_start, train_start+train_set):
     train_y[i] = data[0, i+train_len: i+train_len+predict_len]
 
 test_start = 10000
-test_len = 20
+test_len = train_len
 test_set = 1000
 
 test_x = np.zeros((test_set, test_len))
@@ -103,23 +103,27 @@ with session.as_default() as sess:
 
 
 with session.as_default() as sess:
-    ## 测试结果
-    # test_x = np.zeros((1, 20))
-    test_x = data[0:1, test_start:test_start + 20]
-    # test_x = np.array(test_x, dtype=np.float32)
-    predict_y = np.zeros((1000, ))
-    print(test_x.shape)
-    for i in range(1000):
-        # print(i)
+    if False:
+        test_x = data[0:1, test_start:test_start + 20]
+        predict_y = np.zeros((1000, ))
+        print(test_x.shape)
+        for i in range(1000):
+            feed_dict = {x: test_x[:, :, None], keep_prob: 1.0}
+            results = sess.run(predictions, feed_dict=feed_dict)
+            predict_y[i] = results
+            test_x = np.append(test_x[:, :-1], results, axis=1)
+        results = predict_y
+    else:
         feed_dict = {x: test_x[:, :, None], keep_prob: 1.0}
         results = sess.run(predictions, feed_dict=feed_dict)
-        predict_y[i] = results
-        test_x = np.append(test_x[:, :-1], results, axis=1)
-    results = predict_y
+
     f = plt.figure()
     plt.plot(results, 'r', label='predicted wave')
     plt.plot(test_y, 'g--', label='real wave')
     plt.legend()
+    plt.title('NN prediction vs real')
+    plt.xlabel('data points')
+    plt.ylabel('wave height(normalized)')
     plt.show()
 
     f.savefig("nn_predict.pdf")
