@@ -6,13 +6,13 @@ data=data.WG10_DHI;
 x_raw=data.Time;
 y_raw=data.Data;
 
-mesh_dencity = 1;
-data_set_num_set = floor(linspace(1e1, 5e2, mesh_dencity));
-train_len_set = floor(linspace(1e1, 5e2, mesh_dencity)); 
+mesh_dencity = 10;
+data_set_num_set = 500%floor(linspace(1e1, 5e2, mesh_dencity));
+train_len_set = 173%floor(linspace(1e1, 5e2, mesh_dencity)); 
 parameter_str = strcat('-',num2str(data_set_num_set(end)), '-', num2str(train_len_set(end)),'_');
 
 predict_len = 100; 
-start_train_index = 1; 
+start_train_index = 888; 
 start_predict_index = 3e4;
 
 svm_kernel = {'gaussian', 'rbf', 'linear', 'polynomial'};
@@ -23,7 +23,7 @@ error_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
 rmse_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
 time_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
 
-for kernel_num = 1:numel(svm_kernel)
+for kernel_num = 4:numel(svm_kernel)
     for i = 1:numel(data_set_num_set)
         data_set_num = data_set_num_set(i);
         for k = 1:numel(train_len_set)
