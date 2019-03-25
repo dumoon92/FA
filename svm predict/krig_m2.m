@@ -35,6 +35,7 @@ for train_len = train_len_set
         y_train = [x_train(2:end); new_y];
         model = fitrgp(x_train, y_train);
     end
+    x_y_predict_y = x_y_predict_y(10:end, :);
     rmse_matrix = [rmse_matrix, sum(abs(x_y_predict_y(:, 2) - x_y_predict_y(:, 3))./x_y_predict_y(:, 2))/size(x_y_predict_y, 1)];
     %% plot
     figure
