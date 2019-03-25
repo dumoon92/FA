@@ -33,13 +33,13 @@ for kernel_num = 1:numel(svm_kernel)
                 predict_len, start_train_index, start_predict_index, svm_kernel(kernel_num));
             error_matrix(k, i, kernel_num) = error;
             rmse_matrix(k, i, kernel_num) = rmse;
-            time_matrix(k, i, kernel_num) = tic;
+            time_matrix(k, i, kernel_num) = toc;
         end
     end
 end
 
 %% plot error
-figure('units','normalized','outerposition',[0 0 0.55 1])  % output graph as full screen
+figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
     subplot(2, 2, kernel_num);
     if strfind(version, '2015')
@@ -57,9 +57,9 @@ set(gcf, 'Units', 'inches');
 pos = get(gcf, 'Position');
 set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
 saveas(gcf, strcat('new_svm_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
-
+close
 %% plot rmse
-figure('units','normalized','outerposition',[0 0 0.55 1])  % output graph as full screen
+figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
     subplot(2, 2, kernel_num);
     if strfind(version, '2015')
@@ -77,9 +77,9 @@ set(gcf, 'Units', 'inches');
 pos = get(gcf, 'Position');
 set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
 saveas(gcf, strcat('new_svm_rmse_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
-
+close
 %% plot time
-figure('units','normalized','outerposition',[0 0 0.55 1])  % output graph as full screen
+figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
     subplot(2, 2, kernel_num);
     if strfind(version, '2015')
@@ -90,12 +90,12 @@ for kernel_num = 1:kernel_num_set
         h = heatmap(data_set_num_set, train_len_set, time_matrix(:, :, kernel_num));  
         h.XLabel = 'data set num set';
         h.YLabel = 'train len set';
-        h.Title = strcat('Ralative Errors by SVM with kernel: ', krig_kernel(kernel_num));
+        h.Title = strcat('Time by SVM with kernel: ', krig_kernel(kernel_num));
     end
 end
 set(gcf, 'Units', 'inches');
 pos = get(gcf, 'Position');
 set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
 saveas(gcf, strcat('new_svm_time_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
-
+close
 save(strcat('new_svm', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.mat'))
