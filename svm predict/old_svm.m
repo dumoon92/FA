@@ -6,7 +6,7 @@ format compact;
 data=load('088IRWaSS7_Wi1d89_C4d3_wave.mat');
 data=data.WG10_DHI;
 x_raw=data.Time;y_raw=data.Data;
-x = my_row_normalize(x_raw)*1e4; y = my_row_normalize(y_raw);
+x = my_row_normalize(x_raw); y = my_row_normalize(y_raw);
 n=size(x,1);
 train_num=1000;
 predict_interval = 1;
