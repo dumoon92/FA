@@ -20,7 +20,7 @@ for train_len = train_len_set
 
     %% train, get 1 value, repredict
     x_train = x(start_train: start_train+train_len-1, :);
-    y_train = y(start_train+train_len, :);
+    y_train = y(start_train: start_train+train_len-1, :);
     model = fitrgp(x_train, y_train);
     for predict_index = 1: predict_len
         if mod(predict_index, 200) == 0
