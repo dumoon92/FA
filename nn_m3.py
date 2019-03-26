@@ -6,7 +6,7 @@ import datetime
 import time
 import seaborn as sns; sns.set()
 
-mesh_dencity = 3
+mesh_dencity = 8
 
 # data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat')['WG10_DHI']
 data = np.transpose(scipy.io.loadmat('matlab.mat')['data'])
@@ -123,8 +123,8 @@ def method_3(train_len=10, data_set=500, predict_num=300, train_start=0, test_st
 
     return test_y, results
 
-train_len_set = np.linspace(10, 500, mesh_dencity, dtype=np.int8)
-data_set_set = np.linspace(10, 500, mesh_dencity, dtype=np.int8)
+train_len_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
+data_set_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
 
 error_matrix = np.zeros((mesh_dencity, mesh_dencity))
 rmse_matrix = np.zeros((mesh_dencity, mesh_dencity))
