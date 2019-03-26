@@ -3,7 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io
 import datetime
+import time
+import seaborn as sns; sns.set()
 
+mesh_dencity = 3
 
 # data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat')['WG10_DHI']
 data = np.transpose(scipy.io.loadmat('matlab.mat')['data'])
@@ -16,9 +19,9 @@ def norm(x):
 data = norm(data)
 data = np.array(data, dtype=np.float32)
 
-def method_3(train_len, predict_num=100, train_start=0, test_start=20000):
 
-    train_set = 500
+def method_3(train_len=10, data_set=500, predict_num=300, train_start=0, test_start=20000):
+
     predict_len = 1
 
     test_len = train_len
@@ -35,10 +38,10 @@ def method_3(train_len, predict_num=100, train_start=0, test_start=20000):
     for model_index in range(predict_num):
         print('model_index = ', model_index)
         tf.reset_default_graph()
-        train_x = np.zeros((train_set, train_len))
-        train_y = np.zeros((train_set,))
+        train_x = np.zeros((data_set, train_len))
+        train_y = np.zeros((data_set,))
         print(train_x.shape, train_y.shape)
-        for i in range(train_start, train_start + train_set):
+        for i in range(train_start, train_start + data_set):
             train_x[i, :] = data[0, i: i+train_len]
             train_y[i] = data[0, i+train_len+model_index: i+train_len+predict_len+model_index]
 
@@ -118,5 +121,31 @@ def method_3(train_len, predict_num=100, train_start=0, test_start=20000):
     date_str = str(datetime.datetime.now()).replace(' ', '').replace(':', '_').replace('.', '_')
     f.savefig("nn_predict-3-" + str(train_len) + '_' + date_str + ".pdf")
 
+    return test_y, results
 
-method_3(train_len=10)
+train_len_set = np.linspace(10, 500, mesh_dencity, dtype=np.int8)
+data_set_set = np.linspace(10, 500, mesh_dencity, dtype=np.int8)
+
+error_matrix = np.zeros((mesh_dencity, mesh_dencity))
+rmse_matrix = np.zeros((mesh_dencity, mesh_dencity))
+time_matrix = np.zeros((mesh_dencity, mesh_dencity))
+
+for k, train_len in enumerate(train_len_set):
+    for j, data_set in enumerate(data_set_set):
+        time_start = time.clock()
+        test_y, predict_y = method_3(train_len=train_len, data_set=data_set)
+        time_matrix[k, j] = time.clock()-time_start
+        error_matrix[k, j] = np.divide(np.abs(np.subtract(test_y, predict_y)), test_y).sum()/len(test_y)
+        rmse_matrix[k, j] = np.sqrt(np.square(np.subtract(test_y, predict_y)).mean())
+
+ax = sns.heatmap(rmse_matrix, index='Data Set', columns='Train Length', annot=True, fmt=".2f", linewidths=.5, xticklabels=train_len_set, yticklabels=data_set_set)
+fig = ax.get_figure()
+fig.savefig('nn_rmse.pdf', dpi=400)
+
+ax = sns.heatmap(error_matrix, index='Data Set', columns='Train Length', annot=True, fmt=".2f", linewidths=.5, xticklabels=train_len_set, yticklabels=data_set_set)
+fig = ax.get_figure()
+fig.savefig('nn_error.pdf', dpi=400)
+
+ax = sns.heatmap(time_matrix, index='Data Set', columns='Train Length', annot=True, fmt=".2f", linewidths=.5, xticklabels=train_len_set, yticklabels=data_set_set)
+fig = ax.get_figure()
+fig.savefig('nn_time.pdf', dpi=400)
