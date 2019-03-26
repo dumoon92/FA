@@ -6,7 +6,7 @@ data=data.WG10_DHI;
 x_raw=data.Time;
 y_raw=data.Data;
 
-mesh_dencity = 1;
+mesh_dencity = 10;
 data_set_num_set = floor(linspace(1e1, 5e2, mesh_dencity));
 train_len_set = floor(linspace(1e1, 5e2, mesh_dencity)); 
 parameter_str = strcat('-',num2str(data_set_num_set(end)), '-', num2str(train_len_set(end)),'_');
