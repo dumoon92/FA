@@ -29,18 +29,17 @@ def method_3(train_len=10, data_set=500, predict_num=300, train_start=0, test_st
 
     test_x = data[0: 1, test_start-train_len: test_start]
     test_y = data[0, test_start: test_start+predict_num]
-    print(test_x.shape, test_y.shape)
     results = np.zeros((predict_num, ))
 
     lstm_size = 30
     lstm_layers = 2
     batch_size = 64
     for model_index in range(predict_num):
-        print('model_index = ', model_index)
+        if model_index%50 == 0:
+            print('model_index = ', model_index)
         tf.reset_default_graph()
         train_x = np.zeros((data_set, train_len))
         train_y = np.zeros((data_set,))
-        print(train_x.shape, train_y.shape)
         for i in range(train_start, train_start + data_set):
             train_x[i, :] = data[0, i: i+train_len]
             train_y[i] = data[0, i+train_len+model_index: i+train_len+predict_len+model_index]
@@ -110,7 +109,6 @@ def method_3(train_len=10, data_set=500, predict_num=300, train_start=0, test_st
 
     f = plt.figure()
     plt.plot(results, 'r', label='predicted wave')
-    print(test_y.shape)
     plt.plot(test_y, 'g--', label='real wave')
     plt.legend()
     plt.title('NN prediction vs real with train length = ' + str(train_len))
@@ -132,6 +130,7 @@ time_matrix = np.zeros((mesh_dencity, mesh_dencity))
 
 for k, train_len in enumerate(train_len_set):
     for j, data_set in enumerate(data_set_set):
+        print((k, j))
         time_start = time.clock()
         test_y, predict_y = method_3(train_len=train_len, data_set=data_set)
         time_matrix[k, j] = time.clock()-time_start
