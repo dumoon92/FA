@@ -20,7 +20,7 @@ data = norm(data)
 data = np.array(data, dtype=np.float32)
 
 
-def method_3(train_len=10, data_set=50, predict_num=10, train_start=0, test_start=20000):
+def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_start=20000):
 
     predict_len = 1
 
@@ -131,32 +131,8 @@ def method_3(train_len=10, data_set=50, predict_num=10, train_start=0, test_star
 
     return test_y, results
 
-train_len_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
-data_set_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
 
-error_matrix = np.zeros((mesh_dencity, mesh_dencity))
-rmse_matrix = np.zeros((mesh_dencity, mesh_dencity))
-time_matrix = np.zeros((mesh_dencity, mesh_dencity))
+test_y, predict_y = method_3(predict_num=300)
 
-for k, train_len in enumerate(train_len_set):
-    for j, data_set in enumerate(data_set_set):
-        print((k, j))
-        time_start = time.clock()
-        test_y, predict_y = method_3(train_len=train_len, data_set=data_set)
-        print(test_y.shape, predict_y.shape)
-        time_matrix[k, j] = time.clock()-time_start
-        error_matrix[k, j] = (np.abs(test_y-predict_y)/test_y).mean()
-        rmse_matrix[k, j] = np.sqrt(np.square(np.subtract(test_y, predict_y)).mean())
-        print((time_matrix[k, j], error_matrix[k, j], rmse_matrix[k, j]))
 
-ax = sns.heatmap(rmse_matrix, index='Data Set', columns='Train Length', annot=True, fmt=".2f", linewidths=.5, xticklabels=train_len_set, yticklabels=data_set_set)
-fig = ax.get_figure()
-fig.savefig('nn_rmse.pdf', dpi=400)
 
-ax = sns.heatmap(error_matrix, index='Data Set', columns='Train Length', annot=True, fmt=".2f", linewidths=.5, xticklabels=train_len_set, yticklabels=data_set_set)
-fig = ax.get_figure()
-fig.savefig('nn_error.pdf', dpi=400)
-
-ax = sns.heatmap(time_matrix, index='Data Set', columns='Train Length', annot=True, fmt=".2f", linewidths=.5, xticklabels=train_len_set, yticklabels=data_set_set)
-fig = ax.get_figure()
-fig.savefig('nn_time.pdf', dpi=400)

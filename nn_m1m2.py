@@ -120,6 +120,7 @@ def method_1_and_2(method, train_len, train_start=0, test_start=20000):
             feed_dict = {x: test_x[:, :, None], keep_prob: 1.0}
             results = sess.run(predictions, feed_dict=feed_dict)
 
+        results = results[:, 0]  # 2D -> 1D
         f = plt.figure()
         plt.plot(results, 'r', label='predicted wave')
         print(test_y.shape)
@@ -132,6 +133,9 @@ def method_1_and_2(method, train_len, train_start=0, test_start=20000):
 
         date_str = str(datetime.datetime.now()).replace(' ', '').replace(':', '_').replace('.', '_')
         f.savefig("nn_predict-" + str(method) + "-" + str(train_len) + '_' + date_str + ".pdf")
+        return test_y, results
 
 
-method_1_and_2(method=2, train_len=100)
+test_y, predict_y = method_1_and_2(method=2, train_len=100)
+print(test_y.shape, predict_y.shape)
+

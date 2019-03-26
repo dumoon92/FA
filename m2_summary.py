@@ -135,7 +135,9 @@ train_len_set = [2, 4, 7, 10, 30, 50, 70, 100, 170, 200, 230, 270, 300]
 error_list = np.zeros((len(train_len_set), ))
 for k, train_len in enumerate(train_len_set):
     test_y, predict_y = method_1_and_2(method=2, train_len=train_len)
+    print(test_y.shape, predict_y.shape)
     error_list[k] = (np.abs(test_y-predict_y)/predict_y).mean()
+    print(error_list[k])
 
 f = plt.figure()
 plt.plot(train_len_set, error_list)

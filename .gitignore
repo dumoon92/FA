@@ -4,4 +4,4 @@
 *.m~
 svm predict.7z
 
-*.pdf
+# *.pdf
