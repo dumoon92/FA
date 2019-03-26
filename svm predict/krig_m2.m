@@ -9,6 +9,7 @@ x_raw=data.Time;y_raw=data.Data;
 x = my_row_normalize(x_raw); y = my_row_normalize(y_raw);
 n=size(x,1);
 train_len_set=[2, 4, 7, 10, 30, 50, 70, 100, 130, 170, 200,230, 270, 300];
+% train_len_set = [4];
 rmse_matrix = [];
 
 for train_len = train_len_set
@@ -26,13 +27,15 @@ for train_len = train_len_set
         if mod(predict_index, 200) == 0
             predict_index
         end
-
-        x_y_predict_y(predict_index, :) = [x(start_predict+predict_index-1), ...
-            y(start_predict+predict_index-1), predict(model, x(start_predict+predict_index-1))];
-        x_train = x(start_train+predict_index: start_train+train_len-1+predict_index, :);
-        y_train = y(start_train+predict_index: start_train+train_len-1+predict_index, :);
+        
+        new_x = x(start_train+train_len+predict_index-1);
+        new_y = y(start_train+train_len+predict_index-1);
+        x_y_predict_y(predict_index, :) = [new_x, new_y, predict(model, new_x)*train_len];
+        x_train = [x_train(2:end); new_x];
+        y_train = [x_train(2:end); new_y];
         model = fitrgp(x_train, y_train);
     end
+    x_y_predict_y = x_y_predict_y(10:end, :);
     rmse_matrix = [rmse_matrix, sum(abs(x_y_predict_y(:, 2) - x_y_predict_y(:, 3))./x_y_predict_y(:, 2))/size(x_y_predict_y, 1)];
     %% plot
     figure
