@@ -30,7 +30,7 @@ for train_len = train_len_set
         
         new_x = x(start_train+train_len+predict_index-1);
         new_y = y(start_train+train_len+predict_index-1);
-        x_y_predict_y(predict_index, :) = [new_x, new_y, predict(model, new_x)*train_len];
+        x_y_predict_y(predict_index, :) = [new_x, new_y, predict(model, new_x)];
         x_train = [x_train(2:end); new_x];
         y_train = [x_train(2:end); new_y];
         model = fitrgp(x_train, y_train);
