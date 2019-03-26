@@ -94,10 +94,10 @@ def method_3(train_len=10, data_set=500, predict_num=300, train_start=0, test_st
 
                     loss, _ = sess.run([cost, optimizer], feed_dict=feed_dict)
 
-                    if iteration % 100 == 0:
-                        print('Epochs:{}/{}'.format(e, epochs),
-                              'Iteration:{}'.format(iteration),
-                              'Train loss: {:.8f}'.format(loss))
+                    # if iteration % 100 == 0:
+                    #     print('Epochs:{}/{}'.format(e, epochs),
+                    #           'Iteration:{}'.format(iteration),
+                    #           'Train loss: {:.8f}'.format(loss))
                     iteration += 1
 
 
