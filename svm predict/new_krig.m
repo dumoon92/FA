@@ -12,12 +12,11 @@ train_len_set = floor(linspace(1e1, 5e2, mesh_dencity));
 
 parameter_str = strcat('-',num2str(data_set_num_set(end)), '-', num2str(train_len_set(end)),'_');
 
-predict_len = 270; 
+predict_len = 100; 
 start_train_index = 666; 
 start_predict_index = 3e4;
 
-svm_kernel = {'gaussian', 'rbf', 'linear', 'polynomial'};
-krig_kernel = {'squaredexponential', 'matern32', 'matern52'};
+krig_kernel = {'squaredexponential', 'matern52'};
 kernel_num_set = numel(krig_kernel);
 error_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
 rmse_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
@@ -38,9 +37,9 @@ for kernel_num = 2:kernel_num_set
 end
 
 %% plot error
-figure('units','normalized','outerposition',[0 0 0.55 1])  % output graph as full screen
+figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
-    subplot(2, 2, kernel_num);
+    subplot(2, 1, kernel_num);
     if strfind(version, '2015')
         h = heatmap(error_matrix(:, :, kernel_num));
         title(strcat('Krig with kernel', krig_kernel(kernel_num)))
@@ -58,9 +57,9 @@ set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(
 saveas(gcf, strcat('new_krig_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 
 %% plot rmse
-figure('units','normalized','outerposition',[0 0 0.55 1])  % output graph as full screen
+figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
-    subplot(2, 2, kernel_num);
+    subplot(2, 1, kernel_num);
     if strfind(version, '2015')
         h = heatmap(rmse_matrix(:, :, kernel_num));
         title(strcat('Krig with kernel', krig_kernel(kernel_num)))
@@ -78,9 +77,9 @@ set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(
 saveas(gcf, strcat('new_krig_rmse_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 
 %% plot time
-figure('units','normalized','outerposition',[0 0 0.55 1])  % output graph as full screen
+figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
-    subplot(2, 2, kernel_num);
+    subplot(2, 1, kernel_num);
     if strfind(version, '2015')
         h = heatmap(time_matrix(:, :, kernel_num));
         title(strcat('Krig with kernel', krig_kernel(kernel_num)))
