@@ -36,6 +36,9 @@ for kernel_num = 2:kernel_num_set
     end
 end
 
+%% save mat
+save(strcat('new_krig_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.mat'))
+
 %% plot error
 figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
@@ -97,4 +100,3 @@ set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(
 saveas(gcf, strcat('new_krig_time_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 
 
-save(strcat('new_krig_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.mat'))
