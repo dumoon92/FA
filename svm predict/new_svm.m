@@ -16,8 +16,7 @@ start_train_index = 1;
 start_predict_index = 3e4;
 
 svm_kernel = {'gaussian', 'rbf', 'linear', 'polynomial'};
-krig_kernel = {'squaredexponential', 'matern32', 'matern52',...
-    'ardsquaredexponential'};
+
 kernel_num_set = numel(svm_kernel);
 error_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
 rmse_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
@@ -44,13 +43,13 @@ for kernel_num = 1:kernel_num_set
     subplot(2, 2, kernel_num);
     if strfind(version, '2015')
         h = heatmap(error_matrix(:, :, kernel_num));
-        title(strcat('SVM with kernel', krig_kernel(kernel_num)))
+        title(strcat('SVM with kernel', svm_kernel(kernel_num)))
     elseif strfind(version, '2018')
         % only for high version MATLAB
         h = heatmap(data_set_num_set, train_len_set, error_matrix(:, :, kernel_num));  
         h.XLabel = 'data set num set';
         h.YLabel = 'train len set';
-        h.Title = strcat('Ralative Errors by SVM with kernel: ', krig_kernel(kernel_num));
+        h.Title = strcat('Ralative Errors by SVM with kernel: ', svm_kernel(kernel_num));
     end
 end
 set(gcf, 'Units', 'inches');
@@ -64,13 +63,13 @@ for kernel_num = 1:kernel_num_set
     subplot(2, 2, kernel_num);
     if strfind(version, '2015')
         h = heatmap(rmse_matrix(:, :, kernel_num));
-        title(strcat('SVM with kernel', krig_kernel(kernel_num)))
+        title(strcat('SVM with kernel', svm_kernel(kernel_num)))
     elseif strfind(version, '2018')
         % only for high version MATLAB
         h = heatmap(data_set_num_set, train_len_set, rmse_matrix(:, :, kernel_num));  
         h.XLabel = 'data set num set';
         h.YLabel = 'train len set';
-        h.Title = strcat('RMSE by SVM with kernel: ', krig_kernel(kernel_num));
+        h.Title = strcat('RMSE by SVM with kernel: ', svm_kernel(kernel_num));
     end
 end
 set(gcf, 'Units', 'inches');
@@ -84,13 +83,13 @@ for kernel_num = 1:kernel_num_set
     subplot(2, 2, kernel_num);
     if strfind(version, '2015')
         h = heatmap(time_matrix(:, :, kernel_num));
-        title(strcat('SVM with kernel', krig_kernel(kernel_num)))
+        title(strcat('SVM with kernel', svm_kernel(kernel_num)))
     elseif strfind(version, '2018')
         % only for high version MATLAB
         h = heatmap(data_set_num_set, train_len_set, time_matrix(:, :, kernel_num));  
         h.XLabel = 'data set num set';
         h.YLabel = 'train len set';
-        h.Title = strcat('Time by SVM with kernel: ', krig_kernel(kernel_num));
+        h.Title = strcat('Time by SVM with kernel: ', svm_kernel(kernel_num));
     end
 end
 set(gcf, 'Units', 'inches');
