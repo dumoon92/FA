@@ -132,7 +132,7 @@ def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_s
     return test_y, results
 
 
-test_y, predict_y = method_3(predict_num=300)
+test_y, predict_y = method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_start=20000)
 
 
 
