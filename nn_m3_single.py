@@ -41,6 +41,7 @@ def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_s
         train_x = np.zeros((data_set, train_len))
         train_y = np.zeros((data_set,))
         for i in range(train_start, train_start + data_set):
+            # print(data.shape, i)
             train_x[i, :] = data[0, i: i+train_len]
             train_y[i] = data[0, i+train_len+model_index: i+train_len+predict_len+model_index]
 
@@ -132,7 +133,7 @@ def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_s
     return test_y, results
 
 
-test_y, predict_y = method_3(predict_num=300)
+test_y, predict_y = method_3(train_len=80, data_set=500, predict_num=300, train_start=100, test_start=20000)
 
 
 
