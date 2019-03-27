@@ -6,7 +6,7 @@ import datetime
 import time
 import seaborn as sns; sns.set()
 
-mesh_dencity = 8
+mesh_dencity = 10
 
 # data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat')['WG10_DHI']
 data = np.transpose(scipy.io.loadmat('matlab.mat')['data'])
@@ -142,7 +142,7 @@ for k, train_len in enumerate(train_len_set):
     for j, data_set in enumerate(data_set_set):
         print((k, j))
         time_start = time.clock()
-        test_y, predict_y = method_3(train_len=train_len, data_set=data_set)
+        test_y, predict_y = method_3(train_len=train_len, data_set=data_set, predict_num=10)
         print(test_y.shape, predict_y.shape)
         time_matrix[k, j] = time.clock()-time_start
         error_matrix[k, j] = (np.abs(test_y-predict_y)/test_y).mean()

@@ -122,7 +122,7 @@ def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_s
     f = plt.figure()
     plt.plot(np.abs(results-test_y))
     plt.legend()
-    plt.title('NN prediction relative error = ' + str(train_len))
+    plt.title('NN prediction relative error with train length = ' + str(train_len))
     plt.xlabel('Data points')
     plt.ylabel('Relative error')
     plt.show()
@@ -133,7 +133,11 @@ def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_s
     return test_y, results
 
 
+<<<<<<< HEAD
 test_y, predict_y = method_3(train_len=80, data_set=500, predict_num=300, train_start=100, test_start=20000)
+=======
+test_y, predict_y = method_3(train_len=10, data_set=50, predict_num=10, train_start=0, test_start=20000)
+>>>>>>> 707e754d742693ce7e9b71e4c2f6c526769e5877
 
 
 

@@ -5,3 +5,4 @@
 svm predict.7z
 
 # *.pdf
+.vscode/settings.json
