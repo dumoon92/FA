@@ -6,7 +6,7 @@ import datetime
 import time
 import seaborn as sns; sns.set()
 
-mesh_dencity = 8
+mesh_dencity = 10
 
 # data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat')['WG10_DHI']
 data = np.transpose(scipy.io.loadmat('matlab.mat')['data'])
