@@ -20,7 +20,7 @@ data = norm(data)
 data = np.array(data, dtype=np.float32)
 
 
-def method_3(train_len=10, data_set=50, predict_num=10, train_start=0, test_start=20000):
+def method_3(train_len=10, data_set=50, predict_num=10, train_start=10000, test_start=20000):
 
     predict_len = 1
 
@@ -40,9 +40,10 @@ def method_3(train_len=10, data_set=50, predict_num=10, train_start=0, test_star
         tf.reset_default_graph()
         train_x = np.zeros((data_set, train_len))
         train_y = np.zeros((data_set,))
-        for i in range(train_start, train_start + data_set):
-            train_x[i, :] = data[0, i: i+train_len]
-            train_y[i] = data[0, i+train_len+model_index: i+train_len+predict_len+model_index]
+        for i, train_start_index in enumerate(range(train_start, train_start + data_set)):
+            train_x[i, :] = data[0: 1, train_start_index: train_start_index + train_len]
+            train_y[i] = data[0, train_start_index
+                                 + train_len + model_index: train_start_index + train_len + predict_len + model_index]
 
         x = tf.placeholder(tf.float32, [None, train_len, 1], name='input_x')
         y_ = tf.placeholder(tf.float32, [None, 1], name='input_y')
