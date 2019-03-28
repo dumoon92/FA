@@ -21,9 +21,9 @@ predict_y_input = y(start_predict_index-train_len: start_predict_index-1)';
 kernel = char(kernel);
 
 for label_index = 1:predict_len
-    if mod(label_index, 25) == 0
-        label_index
-    end
+%     if mod(label_index, 50) == 0
+%         disp(label_index)
+%     end
 
     krigMdl = fitrgp(train_input, train_label(:, label_index), 'KernelFunction', kernel);
     predict_y(:, label_index) = predict(krigMdl, predict_y_input);

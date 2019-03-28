@@ -40,9 +40,9 @@ def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_s
         tf.reset_default_graph()
         train_x = np.zeros((data_set, train_len))
         train_y = np.zeros((data_set,))
-        for i in range(train_start, train_start + data_set):
-            train_x[i, :] = data[0, i: i+train_len]
-            train_y[i] = data[0, i+train_len+model_index: i+train_len+predict_len+model_index]
+        for i, train_start_index in enumerate(range(train_start, train_start + data_set)):
+            train_x[i, :] = data[0: 1, train_start_index: train_start_index+train_len]
+            train_y[i] = data[0, train_start_index+train_len+model_index: train_start_index+train_len+predict_len+model_index]
 
         x = tf.placeholder(tf.float32, [None, train_len, 1], name='input_x')
         y_ = tf.placeholder(tf.float32, [None, 1], name='input_y')
@@ -121,7 +121,7 @@ def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_s
     f = plt.figure()
     plt.plot(np.abs(results-test_y))
     plt.legend()
-    plt.title('NN prediction relative error = ' + str(train_len))
+    plt.title('NN prediction relative error with train length = ' + str(train_len))
     plt.xlabel('Data points')
     plt.ylabel('Relative error')
     plt.show()
@@ -132,7 +132,7 @@ def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_s
     return test_y, results
 
 
-test_y, predict_y = method_3(predict_num=300)
+test_y, predict_y = method_3(train_len=80, data_set=50, predict_num=30, train_start=1000, test_start=20000)
 
 
 

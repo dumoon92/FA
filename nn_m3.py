@@ -6,7 +6,7 @@ import datetime
 import time
 import seaborn as sns; sns.set()
 
-mesh_dencity = 8
+mesh_dencity = 10
 
 # data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat')['WG10_DHI']
 data = np.transpose(scipy.io.loadmat('matlab.mat')['data'])
@@ -20,7 +20,7 @@ data = norm(data)
 data = np.array(data, dtype=np.float32)
 
 
-def method_3(train_len=10, data_set=50, predict_num=10, train_start=0, test_start=20000):
+def method_3(train_len=10, data_set=50, predict_num=10, train_start=10000, test_start=20000):
 
     predict_len = 1
 
@@ -40,9 +40,10 @@ def method_3(train_len=10, data_set=50, predict_num=10, train_start=0, test_star
         tf.reset_default_graph()
         train_x = np.zeros((data_set, train_len))
         train_y = np.zeros((data_set,))
-        for i in range(train_start, train_start + data_set):
-            train_x[i, :] = data[0, i: i+train_len]
-            train_y[i] = data[0, i+train_len+model_index: i+train_len+predict_len+model_index]
+        for i, train_start_index in enumerate(range(train_start, train_start + data_set)):
+            train_x[i, :] = data[0: 1, train_start_index: train_start_index + train_len]
+            train_y[i] = data[0, train_start_index
+                                 + train_len + model_index: train_start_index + train_len + predict_len + model_index]
 
         x = tf.placeholder(tf.float32, [None, train_len, 1], name='input_x')
         y_ = tf.placeholder(tf.float32, [None, 1], name='input_y')
@@ -142,7 +143,7 @@ for k, train_len in enumerate(train_len_set):
     for j, data_set in enumerate(data_set_set):
         print((k, j))
         time_start = time.clock()
-        test_y, predict_y = method_3(train_len=train_len, data_set=data_set)
+        test_y, predict_y = method_3(train_len=train_len, data_set=data_set, predict_num=10)
         print(test_y.shape, predict_y.shape)
         time_matrix[k, j] = time.clock()-time_start
         error_matrix[k, j] = (np.abs(test_y-predict_y)/test_y).mean()
