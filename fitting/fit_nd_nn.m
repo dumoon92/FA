@@ -6,6 +6,10 @@ N_train = int64(linspace(1000, 1e4, N));  % training number of points from xxx t
 N_test = int64(linspace(100, 890, N));  % testing number of points from xxx to xxx, devided by N parts
 considered_variable = {'N_z', 'A', 'tC', 'S_w', 'W_dg', 'W_p', 'lambda',  'Lambda', 'q', 'W_fw'};
 
+
+
+
+
 NN_time_record = zeros(1, N);
 NN_rmse_record = zeros(1, N);
 for i = 1:N
@@ -40,3 +44,4 @@ title('Training RMSE of different methods')
 xlabel('Number of Data')
 ylabel('RMSE')
 saveas(gcf, 'NNvsKrigvsSVM_rmse_record.pdf')
+
