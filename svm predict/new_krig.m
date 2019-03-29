@@ -42,7 +42,7 @@ save(strcat('new_krig_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}
 
 %% plot error
 figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
-for kernel_num = 2:kernel_num_set
+for kernel_num = 1:kernel_num_set
     subplot(2, 1, kernel_num);
     if strfind(version, '2015')
         h = heatmap(error_matrix(:, :, kernel_num));
