@@ -31,23 +31,30 @@ end
 %%
 time = regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''});
 save(strcat('NN_record', time, '.mat'), 'NN_time_record', 'NN_rmse_record');
-figure
-load(strcat('nn_dimension_', time, '.mat'), 'krig_rmse_record', 'krig_time_record', 'krig_kernel', 'svm_rmse_record', 'svm_time_record', 'svm_kernel');
-semilogy(N_train, [NN_time_record; krig_time_record(4, :); svm_time_record(4, :)]);
+
+figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
+load('10d_rmse_time_record_dimension-kernel_22-Mar-2019_16_15_33', 'krig_rmse_record', 'krig_time_record', 'krig_kernel', 'svm_rmse_record', 'svm_time_record', 'svm_kernel');
+semilogy(1:10, [NN_time_record; krig_time_record(4, :); svm_time_record(4, :)]);
 legend('NN', 'krig ardsquaredexponential', 'svm polynomial');
 title('Training Time of different dimensions')
 xlabel('Dimension of Data')
 ylabel('Training Time (Seconds)')
-saveas(gcf, strcat('nn_dimension_', time, '.pdf'))
-% legend(['NN', krig_kernel, svm_kernel])
+set(gcf, 'Units', 'inches');
+pos = get(gcf, 'Position');
+set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
+saveas(gcf, strcat('nn_dimension_time_', time, '.pdf'))
 
 %%
-figure
-semilogy(N_train, [NN_rmse_record; krig_rmse_record(4, :); svm_rmse_record(4, :)]);
+figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
+semilogy(1:10, [NN_rmse_record; krig_rmse_record(4, :); svm_rmse_record(4, :)]);
 hold on
 legend('NN', 'krig ardsquaredexponential', 'svm polynomial');
 title('Training RMSE of different dimensions')
 xlabel('Dimension of Data')
 ylabel('RMSE')
-saveas(gcf, strcat('nn_dimension_', time, '.pdf'))
+set(gcf, 'Units', 'inches');
+pos = get(gcf, 'Position');
+set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
+
+saveas(gcf, strcat('nn_dimension_rmse_', time, '.pdf'))
 
