@@ -21,10 +21,11 @@ kernel_num_set = numel(krig_kernel);
 error_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
 rmse_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
 time_matrix = ones(mesh_dencity, mesh_dencity, kernel_num_set);
-for kernel_num = 2:kernel_num_set
-    for i = 5:numel(data_set_num_set)
+for kernel_num = 1:kernel_num_set
+    for i = 1:numel(data_set_num_set)
         data_set_num = data_set_num_set(i);
         for k = 1:numel(train_len_set)
+            disp([kernel_num, i, k]);
             train_len = train_len_set(k);
             tic
             [test_y, predict_y, error, rmse] = my_new_krig(y_raw, data_set_num, train_len, ...
