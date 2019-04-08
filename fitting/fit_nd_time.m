@@ -79,48 +79,63 @@ switch task
             end
         end
         %% plot
-        figure
+        figure('units','normalized','outerposition',[0 0 0.3 0.45])  % output graph as full screen
+        semilogy(1:10, krig_time_record)
         hold on
         grid on
-        semilogy(1:10, krig_time_record)
         legend('squaredexponential', 'matern32', 'matern52', 'ardsquaredexponential');
-        title('Training Time for different Dimension Number in Krig')
-        xlabel('Number of Dimension')
-        ylabel('Training Time (Seconds)')
+        title('Training time for different dimension number in kriging')
+        xlabel('Number of dimension')
+        ylabel('Training time (Seconds)')
         hold off
+        
+        set(gcf,'Units','Inches');
+        pos = get(gcf,'Position');
+        set(gcf,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[pos(3), pos(4)])
         saveas(gcf, strcat('KrigTimeDimension_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
 
-        figure
+        figure('units','normalized','outerposition',[0 0 0.3 0.45])  % output graph as full screen
+        semilogy(1:10, svm_time_record)
         hold on
         grid on
-        semilogy(1:10, svm_time_record)
         legend('gaussian', 'rbf', 'linear', 'polynomial');
-        title('Training Time for different Dimension Number in SVM')
-        xlabel('Number of Dimension')
-        ylabel('Training Time (Seconds)')
+        title('Training time for different dimension number in SVM')
+        xlabel('Number of dimension')
+        ylabel('Training time (Seconds)')
         hold off
+        
+        set(gcf,'Units','Inches');
+        pos = get(gcf,'Position');
+        set(gcf,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[pos(3), pos(4)])
         saveas(gcf, strcat('SVMTimeDimension_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
         
-        figure
+        figure('units','normalized','outerposition',[0 0 0.3 0.45])  % output graph as full screen
+        semilogy(1:10,krig_rmse_record)
         hold on
         grid on
-        semilogy(1:10,krig_rmse_record)
-        title('Normalized RMSE for different Dimension Number in Krig')
+        title('RMSE for different dimension number in kriging')
         legend('squaredexponential', 'matern32', 'matern52', 'ardsquaredexponential');
-        xlabel('Number of Dimension')
-        ylabel('Normalized RMSE')
+        xlabel('Number of dimension')
+        ylabel('RMSE')
         hold off
+        set(gcf,'Units','Inches');
+        pos = get(gcf,'Position');
+        set(gcf,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[pos(3), pos(4)])
         saveas(gcf, strcat('KrigErrorDimension_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
         
-        figure
+        figure('units','normalized','outerposition',[0 0 0.3 0.45])  % output graph as full screen
+        semilogy(1:10, svm_rmse_record)
         hold on
         grid on
-        semilogy(1:10, svm_rmse_record)
-        title('Normalized RMSE for different Dimension Number in SVM')
+        title('RMSE for different dimension number in SVM')
         legend('gaussian', 'rbf', 'linear', 'polynomial');
-        xlabel('Number of Dimension')
-        ylabel('Normalized RMSE')
+        xlabel('Number of dimension')
+        ylabel('RMSE')
         hold off
+        
+        set(gcf,'Units','Inches');
+        pos = get(gcf,'Position');
+        set(gcf,'PaperPositionMode','Auto','PaperUnits','Inches','PaperSize',[pos(3), pos(4)])
         saveas(gcf, strcat('SVMErrorDimension_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
 
         
@@ -210,46 +225,57 @@ switch task
         hold off
 
     case 'kernel-number-time-rmse'
-        figure
-%             hold on
-%             grid on
+        figure('units','normalized','outerposition',[0 0 0.3 0.45])  % output graph as full screen
         semilogy(dataset_num, krig_time_record);
-        title('Training Time for different Krig Kernels')
-        xlabel('Number of Data')
-        ylabel('Training Time (Seconds)')
+        hold on
+        grid on
+        title('Training time for different data number in kriging')
+        xlabel('Number of data')
+        ylabel('Training time (Seconds)')
         legend('squaredexponential', 'matern32', 'matern52', 'ardsquaredexponential');
-%             hold off;
+        hold off;
+        set(gcf, 'Units', 'inches');
+        pos = get(gcf, 'Position');
+        set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
         saveas(gcf, 'Training_Time_for_different_Krig_Kernels.pdf')
-        figure
-%             hold on;
-        grid on;
+        
+        figure('units','normalized','outerposition',[0 0 0.3 0.45])  % output graph as full screen
         semilogy(dataset_num, svm_time_record)
+        hold on;
+        grid on;
         legend('gaussian', 'rbf', 'linear', 'polynomial')
-        title('Training Time for different SVM Kernels')
-        xlabel('Number of Data')
-        ylabel('Training Time (Seconds)')
-%             hold off
+        title('Training time for different data number in SVM')
+        xlabel('Number of data')
+        ylabel('Training time (Seconds)')
+        set(gcf, 'Units', 'inches');
+        pos = get(gcf, 'Position');
+        set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
         saveas(gcf, 'Training_Time_for_different_SVM_Kernels.pdf')
 
-        figure
-%             hold on
-        grid on
+        figure('units','normalized','outerposition',[0 0 0.3 0.45])  % output graph as full screen
         semilogy(dataset_num, krig_rmse_record);
-        title('RMSE for different Krig Kernels')
-        xlabel('Number of Data')
+        hold on
+        grid on
+        title('RMSE for different data number in kriging')
+        xlabel('Number of data')
         ylabel('RMSE')
         legend('squaredexponential', 'matern32', 'matern52', 'ardsquaredexponential');
-%             hold off;
+        set(gcf, 'Units', 'inches');
+        pos = get(gcf, 'Position');
+        set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
         saveas(gcf, 'RMSE_for_different_Krig_Kernels.pdf')
-        figure
-%             hold on;
-        grid on;
+        
+        figure('units','normalized','outerposition',[0 0 0.3 0.45])  % output graph as full screen
         semilogy(dataset_num, svm_rmse_record)
+        hold on;
+        grid on;
         legend('gaussian', 'rbf', 'linear', 'polynomial')
-        title('RMSE for different SVM Kernels')
-        xlabel('Number of Data')
+        title('RMSE for different data number in SVM')
+        xlabel('Number of data')
         ylabel('RMSE')
-%             hold off           
+        set(gcf, 'Units', 'inches');
+        pos = get(gcf, 'Position');
+        set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
         saveas(gcf, 'RMSE_for_different_SVM_Kernels.pdf')
     case 'dimension'
         figure

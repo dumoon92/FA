@@ -8,8 +8,8 @@ data=data.WG10_DHI;
 x_raw=data.Time;y_raw=data.Data;
 x = my_row_normalize(x_raw); y = my_row_normalize(y_raw);
 n=size(x,1);
-train_len_set=[2, 4, 7, 10, 30, 50, 70, 100, 130, 170, 200,230, 270, 300];
-% train_len_set = [9, 100];
+% train_len_set=[2, 4, 7, 10, 30, 50, 70, 100, 130, 170, 200,230, 270, 300];
+train_len_set = [9, 20];
 rmse_matrix = [];
 
 for train_len = train_len_set

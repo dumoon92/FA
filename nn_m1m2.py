@@ -5,9 +5,12 @@ import scipy.io
 import datetime
 
 
-# data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat')['WG10_DHI']
-data = np.transpose(scipy.io.loadmat('matlab.mat')['data'])
+data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat').get('WG10_DHI')['Data'][0][0]
+time = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat').get('WG10_DHI')['Time'][0][0]
+data = np.squeeze(data)
+time = np.squeeze(time)
 
+print('data size =', data.shape)
 
 def norm(x):
     return (x - x.min()) / (x.max()-x.min())
@@ -16,29 +19,34 @@ def norm(x):
 data = norm(data)
 data = np.array(data, dtype=np.float32)
 
-def method_1_and_2(method, train_len, train_start=0, test_start=20000):
+def method_1_and_2(method, train_len=100, train_set=500, train_start=0, test_set=666, test_start=80000):
 
-    train_set = 500
+    
 
-    predict_len = 1
+    predict_len = 1  # NN's output should be changed if predict_len != 1
 
     train_x = np.zeros((train_set, train_len))
     train_y = np.zeros((train_set, ))
 
+#   generate training set input
     for i in range(train_start, train_start+train_set):
-        train_x[i, :] = data[0, i: i+train_len]
-        train_y[i] = data[0, i+train_len: i+train_len+predict_len]
+        temp_index = i-train_start
+        train_x[temp_index, :] = data[temp_index: temp_index+train_len]
+        train_y[temp_index] = data[temp_index+train_len: temp_index+train_len+predict_len]
 
     test_len = train_len
-    test_set = 666
 
     test_x = np.zeros((test_set, test_len))
     test_y = np.zeros((test_set, ))
-    for i in range(test_start-test_len, test_start-test_len+test_set):
-        test_x[i-test_start, :] = data[0, i: i+test_len]
-        test_y[i-test_start] = data[0, i+test_len: i+test_len+predict_len]
+    for i in range(test_start, test_start+test_set):
+        temp_index = i-test_start
+        test_x[temp_index, :] = data[temp_index: temp_index+test_len]
+        test_y[temp_index] = data[temp_index+test_len:temp_index+test_len+predict_len]
 
-    print(train_x.shape, train_y.shape, test_x.shape, test_y.shape)
+        # test_x[i-test_start, :] = data[0, i: i+test_len]
+        # test_y[i-test_start] = data[0, i+test_len: i+test_len+predict_len]
+
+    print('Training set size of x, y:', train_x.shape, train_y.shape, '\nTraining set size of x, y:', test_x.shape, test_y.shape)
 
     lstm_size = 30
     lstm_layers = 2
@@ -80,6 +88,7 @@ def method_1_and_2(method, train_len, train_start=0, test_start=20000):
             yield X[begin_i:end_i], y[begin_i:end_i]
 
 
+    # training 
     epochs = 20
     session = tf.Session()
     with session.as_default() as sess:
@@ -101,25 +110,28 @@ def method_1_and_2(method, train_len, train_start=0, test_start=20000):
                           'Train loss: {:.8f}'.format(loss))
                 iteration += 1
 
-
+    # testing
     with session.as_default() as sess:
         if method==1:
             # method 1: no update
-            test_x = data[0:1, test_start:test_start + test_len]
-            predict_y = np.zeros((1000, ))
-            print(test_x.shape)
-            for i in range(1000):
-                feed_dict = {x: test_x[:, :, None], keep_prob: 1.0}
-                results = sess.run(predictions, feed_dict=feed_dict)
-                predict_y[i] = results
-                test_x = np.append(test_x[:, :-1], results, axis=1)
-            results = predict_y
+            # test_x = data[test_start:test_start + test_len]
+            predict_y = np.zeros((test_len, ))
+            print('test_x.shape:', test_x.shape)
+            # for i in range(test_set):
+            print(test_x[:, :, None].shape)
+            feed_dict = {x: test_x[:, :, None], keep_prob: 1.0}
+            results = sess.run(predictions, feed_dict=feed_dict)
+            print('results size:', results.shape)
+            predict_y = results
+            # test_x = np.append(test_x[:, :-1], results, axis=1)
+            # results = predict_y
 
         elif method==2:
             # method 2: update with every new point
             feed_dict = {x: test_x[:, :, None], keep_prob: 1.0}
             results = sess.run(predictions, feed_dict=feed_dict)
 
+        print('results.shape', results.shape)
         results = results[:, 0]  # 2D -> 1D
         f = plt.figure()
         plt.plot(results, 'r', label='predicted wave')
@@ -137,5 +149,4 @@ def method_1_and_2(method, train_len, train_start=0, test_start=20000):
 
 
 test_y, predict_y = method_1_and_2(method=2, train_len=100)
-print(test_y.shape, predict_y.shape)
 

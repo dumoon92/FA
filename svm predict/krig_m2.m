@@ -6,10 +6,11 @@ format compact;
 data=load('088IRWaSS7_Wi1d89_C4d3_wave.mat');
 data=data.WG10_DHI;
 x_raw=data.Time;y_raw=data.Data;
-x = my_row_normalize(x_raw); y = my_row_normalize(y_raw);
+x = x_raw; 
+y = my_row_normalize(y_raw);
 n=size(x,1);
-train_len_set=[2, 4, 7, 10, 30, 50, 70, 100, 130, 170, 200,230, 270, 300];
-% train_len_set = [4];
+% train_len_set=[2, 4, 7, 10, 30, 50, 70, 100, 130, 170, 200,230, 270, 300];
+train_len_set = [30];
 rmse_matrix = [];
 
 for train_len = train_len_set
@@ -28,22 +29,24 @@ for train_len = train_len_set
             predict_index
         end
         
-        new_x = x(start_train+train_len+predict_index-1);
-        new_y = y(start_train+train_len+predict_index-1);
+        new_x = x(start_predict+predict_index-1);
+        new_y = y(start_predict+predict_index-1);
         x_y_predict_y(predict_index, :) = [new_x, new_y, predict(model, new_x)];
-        x_train = [x_train(2:end); new_x];
-        y_train = [x_train(2:end); new_y];
+%         x_train = [x_train(2:end); new_x];
+%         y_train = [y_train(2:end); new_y];
+        x_train = x(start_predict+predict_index: start_predict+train_len-1+predict_index, :);
+        y_train = y(start_predict+predict_index: start_predict+train_len-1+predict_index, :);
         model = fitrgp(x_train, y_train);
     end
-    x_y_predict_y = x_y_predict_y(10:end, :);
+%     x_y_predict_y = x_y_predict_y(10:end, :);
     rmse_matrix = [rmse_matrix, sum(abs(x_y_predict_y(:, 2) - x_y_predict_y(:, 3))./x_y_predict_y(:, 2))/size(x_y_predict_y, 1)];
     %% plot
     figure
-    plot(x_y_predict_y(:,1), x_y_predict_y(:,2), ...
-         x_y_predict_y(:,1), x_y_predict_y(:,3), '--');
-    title(strcat('Krig prediction vs real with train length=', num2str(train_len)));
-    xlabel('Time');
-    ylabel('Wave hight(normalized)');
+    plot(1: length(x_y_predict_y(:,1)), x_y_predict_y(:,2), ...
+         1: length(x_y_predict_y(:,1)), x_y_predict_y(:,3), '--');
+    title(strcat('Kriging prediction vs real with train length=', num2str(train_len)));
+    xlabel('Data point index');
+    ylabel('Wave elevations');
     legend('Real data', 'Predict data');
     set(gcf, 'Units', 'inches');
     pos = get(gcf, 'Position');

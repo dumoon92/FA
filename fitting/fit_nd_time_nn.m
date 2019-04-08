@@ -32,12 +32,14 @@ end
 time = regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''});
 save(strcat('NN_record', time, '.mat'), 'NN_time_record', 'NN_rmse_record');
 
-figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
+figure('units','normalized','outerposition',[0 0 0.3 0.45])  % output graph as full screen
 load('10d_rmse_time_record_dimension-kernel_22-Mar-2019_16_15_33', 'krig_rmse_record', 'krig_time_record', 'krig_kernel', 'svm_rmse_record', 'svm_time_record', 'svm_kernel');
 semilogy(1:10, [NN_time_record; krig_time_record(4, :); svm_time_record(4, :)]);
+hold on
+grid on
 legend('NN', 'krig ardsquaredexponential', 'svm polynomial');
-title('Training Time of different dimensions')
-xlabel('Dimension of Data')
+title('Training time of three different models in different dimensions')
+xlabel('Number of dimension')
 ylabel('Training Time (Seconds)')
 set(gcf, 'Units', 'inches');
 pos = get(gcf, 'Position');
@@ -45,12 +47,13 @@ set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(
 saveas(gcf, strcat('nn_dimension_time_', time, '.pdf'))
 
 %%
-figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
+figure('units','normalized','outerposition',[0 0 0.3 0.45])  % output graph as full screen
 semilogy(1:10, [NN_rmse_record; krig_rmse_record(4, :); svm_rmse_record(4, :)]);
 hold on
+grid on
 legend('NN', 'krig ardsquaredexponential', 'svm polynomial');
-title('Training RMSE of different dimensions')
-xlabel('Dimension of Data')
+title('RMSE of three different models in different dimensions')
+xlabel('Number of dimension')
 ylabel('RMSE')
 set(gcf, 'Units', 'inches');
 pos = get(gcf, 'Position');
