@@ -38,49 +38,49 @@ for kernel_num = 1:numel(svm_kernel)
 end
 
 %% plot error
-figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
-    subplot(2, 2, kernel_num);
+    figure('units','normalized','outerposition',[0 0 .35 .45])  % output graph as full screen
     if strfind(version, '2015')
         h = heatmap(error_matrix(:, :, kernel_num));
         title(strcat('SVM with kernel', svm_kernel(kernel_num)))
     elseif strfind(version, '2018')
         % only for high version MATLAB
         h = heatmap(data_set_num_set, train_len_set, error_matrix(:, :, kernel_num));  
-        h.XLabel = 'data set num set';
-        h.YLabel = 'train len set';
+        h.XLabel = 'Data set number set';
+        h.YLabel = 'train length set';
         h.Title = strcat('Ralative Errors by SVM with kernel: ', svm_kernel(kernel_num));
     end
-end
-set(gcf, 'Units', 'inches');
-pos = get(gcf, 'Position');
-set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
-saveas(gcf, strcat('new_svm_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
+
+    set(gcf, 'Units', 'inches');
+    pos = get(gcf, 'Position');
+    set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
+    saveas(gcf, strcat('new_svm_error_', string(svm_kernel(kernel_num)), regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 close
+end
+
 %% plot rmse
-figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
-    subplot(2, 2, kernel_num);
+    figure('units','normalized','outerposition',[0 0 .35 .45])  % output graph as full screen
     if strfind(version, '2015')
         h = heatmap(rmse_matrix(:, :, kernel_num));
         title(strcat('SVM with kernel', svm_kernel(kernel_num)))
     elseif strfind(version, '2018')
         % only for high version MATLAB
         h = heatmap(data_set_num_set, train_len_set, rmse_matrix(:, :, kernel_num));  
-        h.XLabel = 'data set num set';
-        h.YLabel = 'train len set';
+        h.XLabel = 'Data set number set';
+        h.YLabel = 'Train length set';
         h.Title = strcat('RMSE by SVM with kernel: ', svm_kernel(kernel_num));
     end
+    set(gcf, 'Units', 'inches');
+    pos = get(gcf, 'Position');
+    set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
+    saveas(gcf, strcat('new_svm_rmse_', string(svm_kernel(kernel_num)), regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
+    close    
 end
-set(gcf, 'Units', 'inches');
-pos = get(gcf, 'Position');
-set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
-saveas(gcf, strcat('new_svm_rmse_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
-close
+
 %% plot time
-figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
-    subplot(2, 2, kernel_num);
+    figure('units','normalized','outerposition',[0 0 .35 .45])  % output graph as full screen
     if strfind(version, '2015')
         h = heatmap(time_matrix(:, :, kernel_num));
         title(strcat('SVM with kernel', svm_kernel(kernel_num)))
@@ -91,10 +91,11 @@ for kernel_num = 1:kernel_num_set
         h.YLabel = 'train len set';
         h.Title = strcat('Time by SVM with kernel: ', svm_kernel(kernel_num));
     end
+    set(gcf, 'Units', 'inches');
+    pos = get(gcf, 'Position');
+    set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
+    saveas(gcf, strcat('new_svm_time_', string(svm_kernel(kernel_num)), regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
+    close
 end
-set(gcf, 'Units', 'inches');
-pos = get(gcf, 'Position');
-set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
-saveas(gcf, strcat('new_svm_time_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
-close
+
 save(strcat('new_svm', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.mat'))

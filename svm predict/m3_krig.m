@@ -41,63 +41,61 @@ end
 save(strcat('new_krig_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.mat'))
 
 %% plot error
-figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
-    subplot(2, 1, kernel_num);
+figure('units','normalized','outerposition',[0 0 .35 .45])  % output graph as full screen
     if strfind(version, '2015')
         h = heatmap(error_matrix(:, :, kernel_num));
         title(strcat('Krig with kernel', krig_kernel(kernel_num)))
     elseif strfind(version, '2018')
         % only for high version MATLAB
         h = heatmap(data_set_num_set, train_len_set, error_matrix(:, :, kernel_num));  
-        h.XLabel = 'data set num set';
-        h.YLabel = 'train len set';
-        h.Title = strcat('Ralative Errors by Krig with kernel: ', krig_kernel(kernel_num));
+        h.XLabel = 'Data set number set';
+        h.YLabel = 'Train length set';
+        h.Title = strcat('Ralative errors by kriging with kernel: ', krig_kernel(kernel_num));
     end
+    set(gcf, 'Units', 'inches');
+    pos = get(gcf, 'Position');
+    set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
+    saveas(gcf, strcat('m3_krig_error_', string(krig_kernel(kernel_num)), regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 end
-set(gcf, 'Units', 'inches');
-pos = get(gcf, 'Position');
-set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
-saveas(gcf, strcat('new_krig_error_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 
 %% plot rmse
-figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
-    subplot(2, 1, kernel_num);
+    figure('units','normalized','outerposition',[0 0 .35 .45])  % output graph as full screen
     if strfind(version, '2015')
         h = heatmap(rmse_matrix(:, :, kernel_num));
         title(strcat('Krig with kernel', krig_kernel(kernel_num)))
     elseif strfind(version, '2018')
         % only for high version MATLAB
         h = heatmap(data_set_num_set, train_len_set, rmse_matrix(:, :, kernel_num));  
-        h.XLabel = 'data set num set';
-        h.YLabel = 'train len set';
-        h.Title = strcat('RMSE by Krig with kernel: ', krig_kernel(kernel_num));
+        h.XLabel = 'Data set number set';
+        h.YLabel = 'Train length set';
+        h.Title = strcat('RMSE by krig with kernel: ', krig_kernel(kernel_num));
     end
-end
-set(gcf, 'Units', 'inches');
-pos = get(gcf, 'Position');
-set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
-saveas(gcf, strcat('new_krig_rmse_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 
+    set(gcf, 'Units', 'inches');
+    pos = get(gcf, 'Position');
+    set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
+    saveas(gcf, strcat('m3_krig_rmse_', string(krig_kernel(kernel_num)), regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
+end
 %% plot time
-figure('units','normalized','outerposition',[0 0 1 1])  % output graph as full screen
 for kernel_num = 1:kernel_num_set
-    subplot(2, 1, kernel_num);
+    figure('units','normalized','outerposition',[0 0 .35 .45])  % output graph as full screen
     if strfind(version, '2015')
         h = heatmap(time_matrix(:, :, kernel_num));
         title(strcat('Krig with kernel', krig_kernel(kernel_num)))
     elseif strfind(version, '2018')
         % only for high version MATLAB
         h = heatmap(data_set_num_set, train_len_set, time_matrix(:, :, kernel_num));  
-        h.XLabel = 'data set num set';
-        h.YLabel = 'train len set';
-        h.Title = strcat('Ralative Errors by Krig with kernel: ', krig_kernel(kernel_num));
+        h.XLabel = 'Data set number set';
+        h.YLabel = 'Train length set';
+        h.Title = strcat('Ralative errors by krig with kernel: ', krig_kernel(kernel_num));
+    
     end
+    set(gcf, 'Units', 'inches');
+    pos = get(gcf, 'Position');
+    set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
+    saveas(gcf, strcat('m3_krig_time_', string(krig_kernel(kernel_num)), regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
 end
-set(gcf, 'Units', 'inches');
-pos = get(gcf, 'Position');
-set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
-saveas(gcf, strcat('new_krig_time_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), parameter_str, '.pdf'));
-
+close all
 
