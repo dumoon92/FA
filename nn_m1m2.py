@@ -20,8 +20,8 @@ def norm(x):
 data = norm(data)
 data = np.array(data, dtype=np.float32)
 
-def method_1_and_2(method, train_len=100, train_set=500, train_start=0, test_set=666, test_start=80000):
-
+def method_1_and_2(method, train_len=100, train_set=500, train_start=1000, test_set=666, test_start=80000):
+    assert train_start > train_set
     
 
     predict_len = 1  # NN's output should be changed if predict_len != 1
@@ -58,29 +58,29 @@ def method_1_and_2(method, train_len=100, train_set=500, train_start=0, test_set
     keep_prob = tf.placeholder(tf.float32, name='keep_prob')
 
 
-    # 有lstm_size个单元
+    # lstm_size is number of units
     lstm = tf.contrib.rnn.BasicLSTMCell(lstm_size)
-    # 添加dropout
+    # add dropout
     drop = tf.contrib.rnn.DropoutWrapper(lstm, output_keep_prob=keep_prob)
-    # 一层不够，就多来几层
+    # more layer
     def lstm_cell():
         return tf.contrib.rnn.BasicLSTMCell(lstm_size)
     cell = tf.contrib.rnn.MultiRNNCell([ lstm_cell() for _ in range(lstm_layers)])
 
-    # 进行forward，得到隐层的输出
+    # forward, get hidden layers output
     outputs, final_state = tf.nn.dynamic_rnn(cell, x, dtype=tf.float32)
-    # 在本问题中只关注最后一个时刻的输出结果，该结果为下一个时刻的预测值
+    # only one output, which is the next moment output
     outputs = outputs[:,-1]
 
-    # 定义输出层, 输出值[-1,1]，因此激活函数用tanh
+    # define output layer, use tanh as activation function
     predictions = tf.contrib.layers.fully_connected(outputs, 1, activation_fn=tf.tanh)
-    # 定义损失函数
+    # define loss function
     cost = tf.losses.mean_squared_error(y_, predictions)
-    # 定义优化步骤
+    # define optimizer method
     optimizer = tf.train.AdamOptimizer().minimize(cost)
 
 
-    # 获取一个batch_size大小的数据
+    # get batch data with batch_size
     def get_batches(X, y, batch_size=64):
         for i in range(0, len(X), batch_size):
             begin_i = i
@@ -93,18 +93,14 @@ def method_1_and_2(method, train_len=100, train_set=500, train_start=0, test_set
     epochs = 20
     session = tf.Session()
     with session.as_default() as sess:
-        # 初始化变量
+        # init
         tf.global_variables_initializer().run()
 
         iteration = 1
         for e in range(epochs):
             for xs, ys in get_batches(train_x, train_y, batch_size):
-                # xs[:,:,None] 增加一个维度，例如[64, 20] ==> [64, 20, 1]，为了对应输入
-                # 同理 ys[:,None]
                 feed_dict = {x: xs[:, :, None], y_: ys[:, None], keep_prob: .5}
-
                 loss, _ = sess.run([cost, optimizer], feed_dict=feed_dict)
-
                 if iteration % 100 == 0:
                     print('Epochs:{}/{}'.format(e, epochs),
                           'Iteration:{}'.format(iteration),
@@ -114,18 +110,27 @@ def method_1_and_2(method, train_len=100, train_set=500, train_start=0, test_set
     # testing
     with session.as_default() as sess:
         if method==1:
-            # method 1: no update
-            # test_x = data[test_start:test_start + test_len]
-            predict_y = np.zeros((test_len, ))
-            print('test_x.shape:', test_x.shape)
-            # for i in range(test_set):
-            print(test_x[:, :, None].shape)
-            feed_dict = {x: test_x[:, :, None], keep_prob: 1.0}
-            results = sess.run(predictions, feed_dict=feed_dict)
-            print('results size:', results.shape)
-            predict_y = results
-            # test_x = np.append(test_x[:, :-1], results, axis=1)
-            # results = predict_y
+            # method 1: no update,
+            test_x = data[None, test_start: test_start + test_len]
+
+            print('test_x.shape', test_x.shape)
+            predict_y = np.zeros((test_set, ))
+            for i in range(test_set):
+                feed_dict = {x: test_x[:, :, None], keep_prob: 1.0}
+                results = sess.run(predictions, feed_dict=feed_dict)
+                predict_y[i] = results
+                test_x = np.append(test_x[:, 1:], results, axis=1)
+            results = predict_y
+            
+            pre_train_y = np.zeros((train_set, ))
+            train_m1_x = data[None, train_start: train_start + train_len]
+            print(train_m1_x.shape)
+            for i in range(train_set):
+                feed_dict = {x: train_m1_x[:, :, None], keep_prob: 1.0}
+                temp_result = sess.run(predictions, feed_dict=feed_dict)
+                pre_train_y[i] = temp_result[0, 0]
+                train_m1_x = np.append(train_m1_x[0:1, 1:], temp_result, axis=1)
+
 
         elif method==2:
             print('train_x', train_x.shape, 'test_x', test_x.shape)
@@ -134,19 +139,22 @@ def method_1_and_2(method, train_len=100, train_set=500, train_start=0, test_set
             # method 2: update with every new point
             feed_dict = {x: test_x[:, :, None], keep_prob: 1.0}
             results = sess.run(predictions, feed_dict=feed_dict)
+            results = results[:, 0]  # 2D -> 1D
 
     print('results.shape', results.shape)
-    results = results[:, 0]  # 2D -> 1D
-    pre_train_y = pre_train_y[:, 0]
     f = plt.figure()
-    test_plot_start_index = len(pre_train_y)
-    plt.plot(np.arange(0, len(results), 1), results, 'r--', label='predicted test data')
-    plt.plot(np.arange(0, len(results), 1), test_y, 'b', label='real test data')
-
-    # plt.plot(np.arange(test_plot_start_index, test_plot_start_index+len(results), 1), results, 'b', label='predicted test data')
-    # plt.plot(np.arange(test_plot_start_index, test_plot_start_index+len(results), 1), test_y, 'r--', label='real test data')
-    # plt.plot(np.arange(0, len(pre_train_y), 1), pre_train_y, 'g--', label='predicted training data')
-    # plt.plot(np.arange(0, len(train_y), 1), train_y, 'k', label='real training data') 
+    if method == 1:
+        # plot training part result and testing part result
+        test_plot_start_index = len(pre_train_y)
+        plt.plot(np.arange(test_plot_start_index, test_plot_start_index+len(results), 1), results, 'b', label='predicted test data')
+        plt.plot(np.arange(test_plot_start_index, test_plot_start_index+len(results), 1), test_y, 'r--', label='real test data')
+        plt.plot(np.arange(0, len(pre_train_y), 1), pre_train_y, 'g--', label='predicted training data')
+        plt.plot(np.arange(0, len(train_y), 1), train_y, 'k', label='real training data') 
+    elif method == 2:
+        # plot only testing part result
+        plt.plot(np.arange(0, len(results), 1), results, 'r--', label='predicted test data')
+        plt.plot(np.arange(0, len(results), 1), test_y, 'b', label='real test data')
+ 
     plt.legend()
     plt.title('Wave prediction vs real in NN with train length = ' + str(train_len))
     plt.xlabel('Data Point Index')
@@ -154,10 +162,10 @@ def method_1_and_2(method, train_len=100, train_set=500, train_start=0, test_set
     plt.show()
 
     date_str = str(datetime.datetime.now()).replace(' ', '').replace(':', '_').replace('.', '_')
-    f.savefig("nn_predict-" + str(method) + "-" + str(train_len) + '_' + date_str + ".pdf")
-    
+    f.savefig('m'+ str(method) + "_nn" + "_trainlen-" + str(train_len) + '_' + date_str + ".pdf")
+
     # save variables
-    with open('nn_m'+str(method)+'_'+date_str+'.pickle', 'wb') as handle:
+    with open('m'+str(method)+'_nn_'+date_str+'.pickle', 'wb') as handle:
         pickle.dump([test_x, test_y, results], handle, protocol=pickle.HIGHEST_PROTOCOL)
     return test_y, results
 
