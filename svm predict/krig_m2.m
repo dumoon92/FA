@@ -9,8 +9,8 @@ x_raw=data.Time;y_raw=data.Data;
 x = x_raw; 
 y = my_row_normalize(y_raw);
 n=size(x,1);
-% train_len_set=[2, 4, 7, 10, 30, 50, 70, 100, 130, 170, 200,230, 270, 300];
-train_len_set = [30, 300];
+train_len_set=[2, 4, 7, 10, 30, 50, 70, 100, 130, 170, 200,230, 270, 300];
+% train_len_set = [30, 300];
 rmse_matrix = [];
 
 for train_len = train_len_set
@@ -51,19 +51,19 @@ for train_len = train_len_set
     set(gcf, 'Units', 'inches');
     pos = get(gcf, 'Position');
     set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
-    saveas(gcf, strcat('Krig_predict_with_update-',num2str(train_len),'_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
+    saveas(gcf, strcat('m2_Krig_',num2str(train_len),'_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
     close
 end
-
+save(strcat('m2_krig_data', '_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.mat'))
 %% plot rmse-train_num
 figure
 plot(train_len_set, rmse_matrix, '-*');
-title(strcat('Krig Ralative Error with different train length', num2str(train_len)));
+% title(strcat('Krig Relative Error with different train length', num2str(train_len)));
 xlabel('Train length');
-ylabel('Ralative Error');
+ylabel('Relative error');
 set(gcf, 'Units', 'inches');
 pos = get(gcf, 'Position');
 set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
-saveas(gcf, strcat('Krig_Ralative_Error_train_len', '_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
+saveas(gcf, strcat('Krig', '_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
 close
 

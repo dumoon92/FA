@@ -8,8 +8,8 @@ data=data.WG10_DHI;
 x_raw=data.Time;y_raw=data.Data;
 x = my_row_normalize(x_raw); y = my_row_normalize(y_raw);
 n=size(x,1);
-% train_len_set=[2, 4, 7, 10, 30, 50, 70, 100, 130, 170, 200,230, 270, 300];
-train_len_set = [9, 20];
+train_len_set=[2, 4, 7, 10, 30, 50, 70, 100, 130, 170, 200,230, 270, 300];
+% train_len_set = [9, 20, 200];
 rmse_matrix = [];
 
 for train_len = train_len_set
@@ -36,7 +36,7 @@ for train_len = train_len_set
     end
     rmse_matrix = [rmse_matrix, sum(abs(x_y_predict_y(:, 2) - x_y_predict_y(:, 3))./x_y_predict_y(:, 2))/size(x_y_predict_y, 1)];
     %% plot
-    figure
+    figure('units','normalized','outerposition',[0 0 .35 .45])  % output graph as full screen
     plot(1: numel(x_y_predict_y(:,1)), x_y_predict_y(:,2), ...
          1: numel(x_y_predict_y(:,1)), x_y_predict_y(:,3), '--');
     title(strcat('SVM prediction vs real with train length=', num2str(train_len)));
@@ -46,19 +46,19 @@ for train_len = train_len_set
     set(gcf, 'Units', 'inches');
     pos = get(gcf, 'Position');
     set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
-    saveas(gcf, strcat('SVM_predict_with_update-',num2str(train_len),'_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
+    saveas(gcf, strcat('m2_SVM_predict_with_update-',num2str(train_len),'_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
     close
 end
-
+save(strcat('m2_SVM_data', '_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.mat'))
 %% plot rmse-train_num
-figure
+figure('units','normalized','outerposition',[0 0 .35 .45])  % output graph as full screen
 plot(train_len_set, rmse_matrix, '-*');
-title(strcat('SVM Ralative Error with different train length', num2str(train_len)));
+title(strcat('SVM Relative Error with different train length', num2str(train_len)));
 xlabel('Train length');
-ylabel('Ralative Error');
+ylabel('Relative error');
 set(gcf, 'Units', 'inches');
 pos = get(gcf, 'Position');
 set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Inches', 'PaperSize', [pos(3), pos(4)]);
-saveas(gcf, strcat('SVM_Ralative_Error_train_len', '_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
+saveas(gcf, strcat('m2_SVM_Relative_Error_train_len', '_', regexprep(datestr(datetime('now')), {'[%() :]+', '_+$'}, {'_', ''}), '.pdf'));
 close
 
