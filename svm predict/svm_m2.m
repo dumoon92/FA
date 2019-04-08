@@ -41,7 +41,7 @@ for train_len = train_len_set
          1: numel(x_y_predict_y(:,1)), x_y_predict_y(:,3), '--');
     title(strcat('SVM prediction vs real with train length=', num2str(train_len)));
     xlabel('Data Point Index');
-    ylabel('Wave hight(normalized)');
+    ylabel('Wave elevation');
     legend('Real data', 'Predict data');
     set(gcf, 'Units', 'inches');
     pos = get(gcf, 'Position');
