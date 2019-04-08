@@ -37,10 +37,10 @@ for train_len = train_len_set
     rmse_matrix = [rmse_matrix, sum(abs(x_y_predict_y(:, 2) - x_y_predict_y(:, 3))./x_y_predict_y(:, 2))/size(x_y_predict_y, 1)];
     %% plot
     figure
-    plot(x_y_predict_y(:,1), x_y_predict_y(:,2), ...
-         x_y_predict_y(:,1), x_y_predict_y(:,3), '--');
+    plot(1: numel(x_y_predict_y(:,1)), x_y_predict_y(:,2), ...
+         1: numel(x_y_predict_y(:,1)), x_y_predict_y(:,3), '--');
     title(strcat('SVM prediction vs real with train length=', num2str(train_len)));
-    xlabel('Time');
+    xlabel('Data Point Index');
     ylabel('Wave hight(normalized)');
     legend('Real data', 'Predict data');
     set(gcf, 'Units', 'inches');

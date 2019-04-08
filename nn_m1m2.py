@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io
 import datetime
+import pickle
 
 
 data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat').get('WG10_DHI')['Data'][0][0]
@@ -127,25 +128,38 @@ def method_1_and_2(method, train_len=100, train_set=500, train_start=0, test_set
             # results = predict_y
 
         elif method==2:
+            print('train_x', train_x.shape, 'test_x', test_x.shape)
+            feed_dict = {x: train_x[:, :, None], keep_prob: 1.0}
+            pre_train_y = sess.run(predictions, feed_dict=feed_dict)
             # method 2: update with every new point
             feed_dict = {x: test_x[:, :, None], keep_prob: 1.0}
             results = sess.run(predictions, feed_dict=feed_dict)
 
-        print('results.shape', results.shape)
-        results = results[:, 0]  # 2D -> 1D
-        f = plt.figure()
-        plt.plot(results, 'r', label='predicted wave')
-        print(test_y.shape)
-        plt.plot(test_y, 'g--', label='real wave')
-        plt.legend()
-        plt.title('NN prediction vs real with train length = ' + str(train_len))
-        plt.xlabel('data points')
-        plt.ylabel('wave height(normalized)')
-        plt.show()
+    print('results.shape', results.shape)
+    results = results[:, 0]  # 2D -> 1D
+    pre_train_y = pre_train_y[:, 0]
+    f = plt.figure()
+    test_plot_start_index = len(pre_train_y)
+    plt.plot(np.arange(0, len(results), 1), results, 'r--', label='predicted test data')
+    plt.plot(np.arange(0, len(results), 1), test_y, 'b', label='real test data')
 
-        date_str = str(datetime.datetime.now()).replace(' ', '').replace(':', '_').replace('.', '_')
-        f.savefig("nn_predict-" + str(method) + "-" + str(train_len) + '_' + date_str + ".pdf")
-        return test_y, results
+    # plt.plot(np.arange(test_plot_start_index, test_plot_start_index+len(results), 1), results, 'b', label='predicted test data')
+    # plt.plot(np.arange(test_plot_start_index, test_plot_start_index+len(results), 1), test_y, 'r--', label='real test data')
+    # plt.plot(np.arange(0, len(pre_train_y), 1), pre_train_y, 'g--', label='predicted training data')
+    # plt.plot(np.arange(0, len(train_y), 1), train_y, 'k', label='real training data') 
+    plt.legend()
+    plt.title('Wave prediction vs real in NN with train length = ' + str(train_len))
+    plt.xlabel('Data Point Index')
+    plt.ylabel('Wave Elevation')
+    plt.show()
+
+    date_str = str(datetime.datetime.now()).replace(' ', '').replace(':', '_').replace('.', '_')
+    f.savefig("nn_predict-" + str(method) + "-" + str(train_len) + '_' + date_str + ".pdf")
+    
+    # save variables
+    with open('nn_m'+str(method)+'_'+date_str+'.pickle', 'wb') as handle:
+        pickle.dump([test_x, test_y, results], handle, protocol=pickle.HIGHEST_PROTOCOL)
+    return test_y, results
 
 
 test_y, predict_y = method_1_and_2(method=2, train_len=100)

@@ -10,7 +10,7 @@ x = x_raw;
 y = my_row_normalize(y_raw);
 n=size(x,1);
 % train_len_set=[2, 4, 7, 10, 30, 50, 70, 100, 130, 170, 200,230, 270, 300];
-train_len_set = [30];
+train_len_set = [30, 300];
 rmse_matrix = [];
 
 for train_len = train_len_set
