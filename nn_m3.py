@@ -6,11 +6,23 @@ import datetime
 import time
 import seaborn as sns; sns.set()
 
+# for single test
+train_len_set = np.array([10, 20])
+data_set_set = np.array([10, 20])
+train_start = 0
+test_start = 30000
+predict_num = 150
+
+# for heatmap
 mesh_dencity = 10
+# train_len_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
+# data_set_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
 
-# data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat')['WG10_DHI']
-data = np.transpose(scipy.io.loadmat('matlab.mat')['data'])
-
+data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat').get('WG10_DHI')['Data'][0][0]
+# data = np.squeeze(data)
+data = np.transpose(data)
+print('data.shape = ', data.shape)
+assert(data.shape[0] == 1)
 
 def norm(x):
     return (x - x.min()) / (x.max()-x.min())
@@ -21,6 +33,8 @@ data = np.array(data, dtype=np.float32)
 
 
 def method_3(train_len=10, data_set=50, predict_num=10, train_start=10000, test_start=20000):
+    parameter_str = '-'+str(data_set)+'-'+str(train_len)+'-'+str(predict_num)+ \
+                    '-'+str(train_start)+'-'+str(test_start)+'_'
 
     predict_len = 1
 
@@ -111,29 +125,29 @@ def method_3(train_len=10, data_set=50, predict_num=10, train_start=10000, test_
     plt.plot(results, 'r', label='predicted wave')
     plt.plot(test_y, 'g--', label='real wave')
     plt.legend()
-    plt.title('NN prediction vs real with train length = ' + str(train_len))
-    plt.xlabel('data points')
-    plt.ylabel('wave height(normalized)')
-    plt.show()
+    plt.title('Wave elevation of neutral network under different inputs')
+    plt.xlabel('Data point index')
+    plt.ylabel('Wave elevation')
+    plt.grid(b=True, which='minor')
+    # plt.show()
 
     date_str = str(datetime.datetime.now()).replace(' ', '').replace(':', '_').replace('.', '_')
-    f.savefig("nn_predict-3-" + str(train_len) + '_' + date_str + ".pdf")
+    f.savefig("nn_predict-m3-" + parameter_str + date_str + ".pdf")
 
     f = plt.figure()
     plt.plot(np.abs(results-test_y))
     plt.legend()
-    plt.title('NN prediction relative error = ' + str(train_len))
-    plt.xlabel('Data points')
-    plt.ylabel('Relative error')
+    plt.title('Average relative error of neutral network under different inputs')
+    plt.xlabel('Data point index')
+    plt.ylabel('Average relative error')
+    plt.grid(b=True, which='minor')
     plt.show()
 
     date_str = str(datetime.datetime.now()).replace(' ', '').replace(':', '_').replace('.', '_')
-    f.savefig("nn_predict_error-3-" + str(train_len) + '_' + date_str + ".pdf")
+    f.savefig("nn_predict_error-3-" + parameter_str + date_str + ".pdf")
 
     return test_y, results
 
-train_len_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
-data_set_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
 
 error_matrix = np.zeros((mesh_dencity, mesh_dencity))
 rmse_matrix = np.zeros((mesh_dencity, mesh_dencity))
@@ -141,14 +155,13 @@ time_matrix = np.zeros((mesh_dencity, mesh_dencity))
 
 for k, train_len in enumerate(train_len_set):
     for j, data_set in enumerate(data_set_set):
-        print((k, j))
+        print('mesh grid = ', (k, j))
         time_start = time.clock()
-        test_y, predict_y = method_3(train_len=train_len, data_set=data_set, predict_num=150)
-        print(test_y.shape, predict_y.shape)
+        test_y, predict_y = method_3(train_len=train_len, data_set=data_set, predict_num=predict_num)
         time_matrix[k, j] = time.clock()-time_start
         error_matrix[k, j] = (np.abs(test_y-predict_y)/test_y).mean()
         rmse_matrix[k, j] = np.sqrt(np.square(np.subtract(test_y, predict_y)).mean())
-        print((time_matrix[k, j], error_matrix[k, j], rmse_matrix[k, j]))
+        print('time, error, rmse = ', (time_matrix[k, j], error_matrix[k, j], rmse_matrix[k, j]))
 
 plt.figure()
 ax = sns.heatmap(rmse_matrix, annot=True, fmt=".2f", linewidths=.5, xticklabels=train_len_set, yticklabels=data_set_set)
