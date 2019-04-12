@@ -7,16 +7,16 @@ import time
 import seaborn as sns; sns.set()
 
 # for single test
-train_len_set = np.array([10, 20])
-data_set_set = np.array([10, 20])
-train_start = 0
-test_start = 30000
-predict_num = 150
+# train_len_set = np.array([10, 20])
+# data_set_set = np.array([10, 20])
+# train_start = 0
+# test_start = 30000
+# predict_num = 150
 
 # for heatmap
 mesh_dencity = 10
-# train_len_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
-# data_set_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
+train_len_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
+data_set_set = np.linspace(10, 500, mesh_dencity, dtype=np.int32)
 
 data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat').get('WG10_DHI')['Data'][0][0]
 # data = np.squeeze(data)
