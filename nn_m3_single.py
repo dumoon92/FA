@@ -8,9 +8,11 @@ import seaborn as sns; sns.set()
 
 mesh_dencity = 8
 
-# data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat')['WG10_DHI']
-data = np.transpose(scipy.io.loadmat('matlab.mat')['data'])
-
+data = scipy.io.loadmat('088IRWaSS7_Wi1d89_C4d3_wave.mat').get('WG10_DHI')['Data'][0][0]
+# data = np.squeeze(data)
+data = np.transpose(data)
+print('data.shape = ', data.shape)
+assert(data.shape[0] == 1)
 
 def norm(x):
     return (x - x.min()) / (x.max()-x.min())
@@ -21,6 +23,8 @@ data = np.array(data, dtype=np.float32)
 
 
 def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_start=20000):
+    parameter_str = '-'+str(data_set)+'-'+str(train_len)+'-'+str(predict_num)+ \
+                    '-'+str(train_start)+'-'+str(test_start)+'_'
 
     predict_len = 1
 
@@ -110,24 +114,26 @@ def method_3(train_len=100, data_set=500, predict_num=100, train_start=0, test_s
     plt.plot(results, 'r', label='predicted wave')
     plt.plot(test_y, 'g--', label='real wave')
     plt.legend()
-    plt.title('NN prediction vs real with train length = ' + str(train_len))
-    plt.xlabel('data points')
-    plt.ylabel('wave height(normalized)')
+    plt.title('Wave elevation of neutral network under different inputs')
+    plt.xlabel('Data point index')
+    plt.ylabel('Wave elevation')
+    plt.grid(b=True, which='minor')
     plt.show()
 
     date_str = str(datetime.datetime.now()).replace(' ', '').replace(':', '_').replace('.', '_')
-    f.savefig("nn_predict-3-" + str(train_len) + '_' + date_str + ".pdf")
+    f.savefig("nn_predict-m3-" + parameter_str + date_str + ".pdf")
 
     f = plt.figure()
     plt.plot(np.abs(results-test_y))
     plt.legend()
-    plt.title('NN prediction relative error with train length = ' + str(train_len))
-    plt.xlabel('Data points')
-    plt.ylabel('Relative error')
+    plt.title('Average relative error of neutral network under different inputs')
+    plt.xlabel('Data point index')
+    plt.ylabel('Average relative error')
+    plt.grid(b=True, which='minor')
     plt.show()
 
     date_str = str(datetime.datetime.now()).replace(' ', '').replace(':', '_').replace('.', '_')
-    f.savefig("nn_predict_error-3-" + str(train_len) + '_' + date_str + ".pdf")
+    f.savefig("nn_predict_error-m3-" + parameter_str + date_str + ".pdf")
 
     return test_y, results
 

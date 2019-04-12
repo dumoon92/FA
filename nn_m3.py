@@ -144,7 +144,7 @@ def method_3(train_len=10, data_set=50, predict_num=10, train_start=10000, test_
     plt.show()
 
     date_str = str(datetime.datetime.now()).replace(' ', '').replace(':', '_').replace('.', '_')
-    f.savefig("nn_predict_error-3-" + parameter_str + date_str + ".pdf")
+    f.savefig("nn_predict_error-m3-" + parameter_str + date_str + ".pdf")
 
     return test_y, results
 
